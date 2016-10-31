@@ -1,136 +1,233 @@
 <?php                         
 // make client to refresh every 10 seconds
-$url1=$_SERVER['REQUEST_URI'];  
+$url1=$_SERVER['REQUEST_URI'];
 header("Refresh: 10; URL=$url1");
 
-$HOURS = 3;
-$SIZE = $HOURS * 6;
-
-// // check if client is a mobile device
-// if (preg_match("/(android|avantgo|blackberry|bolt|boost|cricket|docomo|fone|hiptop|mini|mobi|palm|phone|pie|tablet|up\.browser|up\.link|webos|wos)/i", $_SERVER["HTTP_USER_AGENT"]))
-//   $is_mobile = 1;
-// else
-//   $is_mobile = 0;
+$HOURS = 5;
+$MEAS_PER_HOUR = 6;
+$SIZE = $HOURS * $MEAS_PER_HOUR;
 
 // current date and time
-$now_ts = strftime("%Y.%m.%d %H:%M:%S");
+$format = "%Y.%m.%d %H:%M:%S";
+$now_ts = strftime($format);
 sscanf($now_ts, "%d.%d.%d %d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
 
-// read last temperatures
-// read last temperatures
-$jos_temp_file_name = "data/jos_temp.txt";
-$sus_temp_file_name = "data/sus_temp.txt";
-$is_jos = is_file($jos_temp_file_name);
-$is_sus = is_file($sus_temp_file_name);
-if($is_jos)
+$vn = array (
+    "hm" => array(),
+    "bu" => array(),
+    "bu_r" => array(),
+    "li" => array(),
+    "li_r" => array(),
+    "bi" => array(),
+    "bi_r" => array(),
+    "bj" => array(),
+    "bj_r" => array(),
+    "dl" => array(),
+    "dl_r" => array(),
+    "dm" => array(),
+    "dm_r" => array(),
+    "d3" => array(),
+    "d3_r" => array(),
+    "bs" => array(),
+    "bs_r" => array(),
+);
+
+$m_start = $ts_m - ($ts_m % 10);
+$h_start = $ts_h;
+$m_stop = $ts_m;
+$h_stop = $ts_h;
+$hm_start = sprintf("%02d:%02d", $h_start, $m_start);
+if($m_start === $ts_m)
+  $hm_start_stop = $hm_start;
+else
+  $hm_start_stop = sprintf("%02d:%02d-%02d:%02d", $h_start, $m_start, $h_stop, $m_stop);
+
+$vn["hm"][0] = $hm_start_stop;
+for($i = 1; $i <= $SIZE; ++$i)
 {
-  $jos_temp = file_get_contents($jos_temp_file_name);
-  sscanf($jos_temp, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_ts);
-  // 2016.10.20_11:08:01
-  $start = strpos($jos_ts, "_");
-  $stop = strrpos($jos_ts, ":");
-  if($start !== FALSE && $stop !== FALSE)
+  $m_stop = $m_start;
+  $h_stop = $h_start;
+  $m_start -= 10;
+  if($m_start < 0)
   {
-    $start += 1;
-    $length = $stop - $start;
-    $jos_ts = substr($jos_ts, $start, $length);
+    $m_start = 50;
+    $h_start -= 1;
   }
-$a_bu = array();
-$a_li = array();
-$a_bi = array();
-$a_bj = array();
-$a_bu_r = array();
-$a_li_r = array();
-$a_bi_r = array();
-$a_bj_r = array();
-$jos_time = array();
-  for ( $i = 0 ; $i < $SIZE ; ++$i )
-{
-  $a_bu[$i] = 0;
-  $a_li[$i] = 0;
-  $a_bi[$i] = 0;
-  $a_bj[$i] = 0;
-  $a_bu_r[$i] = 0;
-  $a_li_r[$i] = 0;
-  $a_bi_r[$i] = 0;
-  $a_bj_r[$i] = 0;
-  $jos_time[$i] = "";
-}
-}
-if($is_sus)
-{
-  $sus_temp = file_get_contents($sus_temp_file_name);
-  sscanf($sus_temp, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_ts);
-  $start = strpos($sus_ts, "_");
-  $stop = strrpos($sus_ts, ":");
-  if($start !== FALSE && $stop !== FALSE)
+  if($h_start < 0)
   {
-    $start += 1;
-    $length = $stop - $start;
-    $sus_ts = substr($sus_ts, $start, $length);
+    $h_start = 23;
   }
-$a_dl = array();
-$a_dm = array();
-$a_d3 = array();
-$a_bs = array();
-$a_dl_r = array();
-$a_dm_r = array();
-$a_d3_r = array();
-$a_bs_r = array();
-$sus_time = array();
-for ( $i = 0 ; $i < $SIZE ; ++$i )
-{
-  $a_dl[$i] = 0;
-  $a_dm[$i] = 0;
-  $a_d3[$i] = 0;
-  $a_bs[$i] = 0;
-  $a_dl_r[$i] = 0;
-  $a_dm_r[$i] = 0;
-  $a_d3_r[$i] = 0;
-  $a_bs_r[$i] = 0;
-  $sus_time[$i] = "";
-}
+  $hm_start_stop = sprintf("%02d:%02d-%02d:%02d", $h_start, $m_start, $h_stop, $m_stop);
+  $vn["hm"][$i] = $hm_start_stop;
 }
 
-// read day temperatures
-
-// parter
-$day_file_jos_name = "/opt/www/data/jos_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-$is_day_file_jos = is_file($day_file_jos_name);
-if($is_day_file_jos)
+// get jos average file
+$ok = FALSE;
+$file_name = "data/jos_avg.txt";
+if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
 {
-  $day_file_jos = fopen($day_file_jos_name, "r");
-  while (($line = fgets($day_file_jos)) !== FALSE)
+  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
+  if(strpos($jos_dt, $hm_start) === 0)
   {
-    for($i = ($SIZE - 1); $i > 0; --$i)
+    // ok
+    $ok = TRUE;
+    $vn["bu"][0] = $t_bu;
+    $vn["bu_r"][0] = $t_bu_r;
+    $vn["li"][0] = $t_li;
+    $vn["li_r"][0] = $t_li_r;
+    $vn["bi"][0] = $t_bi;
+    $vn["bi_r"][0] = $t_bi_r;
+    $vn["bj"][0] = $t_bj;
+    $vn["bj_r"][0] = $t_bj_r;
+  }
+}
+if($ok === FALSE)
+{
+  $vn["bu"][0] = 0;
+  $vn["bu_r"][0] = 0;
+  $vn["li"][0] = 0;
+  $vn["li_r"][0] = 0;
+  $vn["bi"][0] = 0;
+  $vn["bi_r"][0] = 0;
+  $vn["bj"][0] = 0;
+  $vn["bj_r"][0] = 0;
+}
+$ok = FALSE;
+$file_name = "data/sus_avg.txt";
+if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
+{
+  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
+  if(strpos($sus_dt, $hm_start) === 0)
+  {
+    // ok
+    $ok = TRUE;
+    $vn["dl"][0] = $t_dl;
+    $vn["dl_r"][0] = $t_dl_r;
+    $vn["dm"][0] = $t_dm;
+    $vn["dm_r"][0] = $t_dm_r;
+    $vn["d3"][0] = $t_d3;
+    $vn["d3_r"][0] = $t_d3_r;
+    $vn["bs"][0] = $t_bs;
+    $vn["bs_r"][0] = $t_bs_r;
+  }
+}
+if($ok === FALSE)
+{
+    $vn["dl"][0] = 0;
+    $vn["dl_r"][0] = 0;
+    $vn["dm"][0] = 0;
+    $vn["dm_r"][0] = 0;
+    $vn["d3"][0] = 0;
+    $vn["d3_r"][0] = 0;
+    $vn["bs"][0] = 0;
+    $vn["bs_r"][0] = 0;
+}
+
+$lines = array();
+$jos_file_name = "data/jos_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
+if(is_file($jos_file_name))
+{
+  $file = new SplFileObject($jos_file_name);
+  if($file->isReadable())
+  {
+    $file->seek($file->getSize());
+    $curr_line = $file->key();
+    $count = 0;
+    while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
     {
-      $a_bu[$i] = $a_bu[($i-1)]; $a_li[$i] = $a_li[($i-1)]; $a_bi[$i] = $a_bi[($i-1)]; $a_bj[$i] = $a_bj[($i-1)];
-      $a_bu_r[$i] = $a_bu_r[$i-1]; $a_li_r[$i] = $a_li_r[$i-1]; $a_bi_r[$i] = $a_bi_r[$i-1]; $a_bj_r[$i] = $a_bj_r[$i-1];
-      $jos_time[$i] = $jos_time[$i-1];
+      $file->seek($curr_line);
+      $line = $file->current();
+      if(($idx = strrpos($line, ",")) !== FALSE)
+      {
+        $key = substr($line, $idx + 1, 11);
+      }
+      $lines[$key] = $line;
     }
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $a_bu[0], $a_bu_r[0], $a_li[0], $a_li_r[0], $a_bi[0], $a_bi_r[0], $a_bj[0], $a_bj_r[0], $jos_time[0]);
   }
-  fclose($day_file_jos);
+}
+// var_dump($lines);
+for($i = 1; $i <= $SIZE; ++$i)
+{
+  $key = $vn["hm"][$i];
+  if(array_key_exists($key, $lines))
+  {
+    $line = $lines[$key];
+    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
+    $vn["bu"][$i] = $t_bu;
+    $vn["bu_r"][$i] = $t_bu_r;
+    $vn["li"][$i] = $t_li;
+    $vn["li_r"][$i] = $t_li_r;
+    $vn["bi"][$i] = $t_bi;
+    $vn["bi_r"][$i] = $t_bi_r;
+    $vn["bj"][$i] = $t_bj;
+    $vn["bj_r"][$i] = $t_bj_r;
+  }
+  else
+  {
+    $vn["bu"][$i] = 0;
+    $vn["bu_r"][$i] = 0;
+    $vn["li"][$i] = 0;
+    $vn["li_r"][$i] = 0;
+    $vn["bi"][$i] = 0;
+    $vn["bi_r"][$i] = 0;
+    $vn["bj"][$i] = 0;
+    $vn["bj_r"][$i] = 0;
+  }
 }
 
-// etaj
-$day_file_sus_name = "/opt/www/data/sus_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-$is_day_file_sus = is_file($day_file_sus_name);
-if($is_day_file_sus)                                                                                                                                                                     
+$lines = array();
+$sus_file_name = "data/sus_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
+if(is_file($sus_file_name))
 {
-  $day_file_sus = fopen($day_file_sus_name, "r");
-  while (($line = fgets($day_file_sus)) !== FALSE)
+  $file = new SplFileObject($sus_file_name);
+  if($file->isReadable())
   {
-    for($i = ($SIZE - 1); $i > 0; --$i)
+    $file->seek($file->getSize());
+    $curr_line = $file->key();
+    $count = 0;
+    while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
     {
-      $a_dl[$i] = $a_dl[$i-1]; $a_dm[$i] = $a_dm[$i-1]; $a_d3[$i] = $a_d3[$i-1]; $a_bs[$i] = $a_bs[$i-1];
-      $a_dl_r[$i] = $a_dl_r[$i-1]; $a_dm_r[$i] = $a_dm_r[$i-1]; $a_d3_r[$i] = $a_d3_r[$i-1]; $a_bs_r[$i] = $a_bs_r[$i-1];
-      $sus_time[$i] = $sus_time[$i-1];
+      $file->seek($curr_line);
+      $line = $file->current();
+      if(($idx = strrpos($line, ",")) !== FALSE)
+      {
+        $key = substr($line, $idx + 1, 11);
+      }
+      $lines[$key] = $line;
     }
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $a_dl[0], $a_dl_r[0], $a_dm[0], $a_dm_r[0], $a_d3[0], $a_d3_r[0], $a_bs[0], $a_bs_r[0], $sus_time[0]);
   }
-  fclose($day_file_sus);
 }
+// var_dump($lines);
+for($i = 1; $i <= $SIZE; ++$i)
+{
+  $key = $vn["hm"][$i];
+  if(array_key_exists($key, $lines))
+  {
+    $line = $lines[$key];
+    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
+    $vn["dl"][$i] = $t_dl;
+    $vn["dl_r"][$i] = $t_dl_r;
+    $vn["dm"][$i] = $t_dm;
+    $vn["dm_r"][$i] = $t_dm_r;
+    $vn["d3"][$i] = $t_d3;
+    $vn["d3_r"][$i] = $t_d3_r;
+    $vn["bs"][$i] = $t_bs;
+    $vn["bs_r"][$i] = $t_bs_r;
+  }
+  else
+  {
+    $vn["dl"][$i] = 0;
+    $vn["dl_r"][$i] = 0;
+    $vn["dm"][$i] = 0;
+    $vn["dm_r"][$i] = 0;
+    $vn["d3"][$i] = 0;
+    $vn["d3_r"][$i] = 0;
+    $vn["bs"][$i] = 0;
+    $vn["bs_r"][$i] = 0;
+  }
+}
+$lines = array();
+// var_dump($vn);
 
 echo "<html>\n";
 echo " <head>\n";
@@ -140,170 +237,109 @@ echo "   html { height:100%; min-height:100%; width:100%; min-width:100%; }\n";
 echo "   body { font-size:large; }\n";
 echo "   input { font-size:large; }\n";
 echo "   table { border-collapse:collapse; border-style:solid; }\n";
-echo "   th { padding:5px; border-style:solid; border-width: thin; }\n";
-echo "   td { padding:5px; border-style:solid; border-width: thin; }\n";
+echo "   th { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
+echo "   td { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
 echo "  </style>\n";
 echo " </head>\n";
 echo " <body>\n";
 echo "  <table>\n";
 echo "   <tr>\n";
-echo "    <th align='left'>Data</th>\n";
-echo "    <td align='center' colspan='".($SIZE + 1)."'>".$now_ts."</td>\n";
+echo "    <th align='center'>Data</th>\n";
+echo "    <td align='center' colspan='".($SIZE+1)."'>".$now_ts."</td>\n";
 echo "   </tr>\n";
 echo "   <tr>\n";
-echo "    <td></td>\n";
-echo "    <td><b>Temperatura</b></td>\n";
-echo "    <td align='center' colspan='".$SIZE."'><b>Temperatura ultimele ".$HOURS." ore</b><br>mediile pe fiecare 10 minute</td>\n";
+echo "    <td rowspan='2'></td>\n";
+echo "    <td align='center' colspan='".($SIZE+1)."'><b>Temperatura ultimele ".$HOURS." ore</b><br>mediile pe fiecare 10 minute</td>\n";
 echo "   </tr>\n";
-echo "\n";
-
-if($is_jos)
+echo "   <tr>\n";
+for($i = 0; $i <= $SIZE; ++$i)
 {
-  echo "   <tr><td colspan='".($SIZE + 2)."'></td></tr>\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Parter</th>\n";
-  echo "    <td align='center'>".$jos_ts."</td>\n";
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-  echo "    <td align='center'>" . $jos_time[$i] . "</td>\n";
-  }
-  echo "   </tr>\n";
-
-  echo "\n";
-  echo "   <!-- Bucatarie -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Bucatarie</th>\n";
-  $p_zec = $t_bu % 100; $p_int = ($t_bu - $p_zec) / 100;
-  $color = ($t_bu_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_bu[$i] % 100; $p_int = ($a_bu[$i] - $p_zec) / 100;
-    $color = ($a_bu_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
-
-  echo "\n";
-  echo "   <!-- Living -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Living</th>\n";
-  $p_zec = $t_li % 100; $p_int = ($t_li - $p_zec) / 100;
-  $color = ($t_li_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_li[$i] % 100; $p_int = ($a_li[$i] - $p_zec) / 100;
-    $color = ($a_li_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
-
-  echo "\n";
-  echo "   <!-- Birou -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Birou</th>\n";
-  $p_zec = $t_bi % 100; $p_int = ($t_bi - $p_zec) / 100;
-  $color = ($t_bi_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_bi[$i] % 100; $p_int = ($a_bi[$i] - $p_zec) / 100;
-    $color = ($a_bi_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
-
-  echo "\n";
-  echo "   <!-- Baie parter -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Baie parter</th>\n";
-  $p_zec = $t_bj % 100; $p_int = ($t_bj - $p_zec) / 100;
-  $color = ($t_bj_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_bj[$i] % 100; $p_int = ($a_bj[$i] - $p_zec) / 100;
-    $color = ($a_bj_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
+  echo "    <th align='center'>".$vn["hm"][$i]."</th>\n";
 }
 echo "\n";
 
-  echo "   <tr><td colspan='".($SIZE + 2)."'></td></tr>\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Etaj</th>\n";
-  echo "    <td align='center'>".$sus_ts."</td>\n";
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-  echo "    <td align='center'>" . $sus_time[$i] . "</td>\n";
-  }
-  echo "   </tr>\n";
+echo "   <tr>\n";
+echo "    <th align='center'>Dormitor Luca</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["dl"][$i] % 100; $p_int = ($vn["dl"][$i] - $p_zec) / 100;
+  $color = ($vn["dl_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 
-  echo "\n";
-  echo "   <!-- Dormitor Luca -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Dormitor Luca</th>\n";
-  $p_zec = $t_dl % 100; $p_int = ($t_dl - $p_zec) / 100;
-  $color = ($t_dl_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_dl[$i] % 100; $p_int = ($a_dl[$i] - $p_zec) / 100;
-    $color = ($a_dl_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
+echo "   <tr>\n"; 
+echo "    <th align='center'>Dormitor matrimonial</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["dm"][$i] % 100; $p_int = ($vn["dm"][$i] - $p_zec) / 100;
+  $color = ($vn["dm_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 
-  echo "\n";
-  echo "   <!-- Dormitor matrimonial -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Dormitor matrimonial</th>\n";
-  $p_zec = $t_dm % 100; $p_int = ($t_dm - $p_zec) / 100;
-  $color = ($t_dm_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_dm[$i] % 100; $p_int = ($a_dm[$i] - $p_zec) / 100;
-    $color = ($a_dm_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
+echo "   <tr>\n"; 
+echo "    <th align='center'>Dormitor oaspeti</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["d3"][$i] % 100; $p_int = ($vn["d3"][$i] - $p_zec) / 100;
+  $color = ($vn["d3_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 
-  echo "\n";
-  echo "   <!-- Dormitor oaspeti -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Dormitor oaspeti</th>\n";
-  $p_zec = $t_d3 % 100; $p_int = ($t_d3 - $p_zec) / 100;
-  $color = ($t_d3_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_d3[$i] % 100; $p_int = ($a_d3[$i] - $p_zec) / 100;
-    $color = ($a_d3_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
+echo "   <tr>\n"; 
+echo "    <th align='center'>Baie etaj</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["bs"][$i] % 100; $p_int = ($vn["bs"][$i] - $p_zec) / 100;
+  $color = ($vn["bs_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 
-  echo "\n";
-  echo "   <!-- Baie etaj -->\n";
-  echo "   <tr>\n";
-  echo "    <th align='left'>Baie etaj</th>\n";
-  $p_zec = $t_bs % 100; $p_int = ($t_bs - $p_zec) / 100;
-  $color = ($t_bs_r > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n"; 
-  for($i = 0; $i < $SIZE; ++$i)
-  {
-    $p_zec = $a_bs[$i] % 100; $p_int = ($a_bs[$i] - $p_zec) / 100;
-    $color = ($a_bs_r[$i] > 0) ? "red" : "blue";
-    echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . " &deg;C</font></td>\n";
-  }
-  echo "   </tr>\n";
+echo "   <tr>\n"; 
+echo "    <th align='center'>Bucatarie</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["bu"][$i] % 100; $p_int = ($vn["bu"][$i] - $p_zec) / 100;
+  $color = ($vn["bu_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 
+echo "   <tr>\n"; 
+echo "    <th align='center'>Living</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["li"][$i] % 100; $p_int = ($vn["li"][$i] - $p_zec) / 100;
+  $color = ($vn["li_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
+
+echo "   <tr>\n"; 
+echo "    <th align='center'>Birou</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["bi"][$i] % 100; $p_int = ($vn["bi"][$i] - $p_zec) / 100;
+  $color = ($vn["bi_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
+
+echo "   <tr>\n"; 
+echo "    <th align='center'>Baie parter</th>\n";
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  $p_zec = $vn["bj"][$i] % 100; $p_int = ($vn["bj"][$i] - $p_zec) / 100;
+  $color = ($vn["bj_r"][$i] > 0) ? "red" : "blue";
+  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
+}
+echo "   </tr>\n";
 echo "\n";
-echo "   <tr><td colspan='".($SIZE + 2)."'></td></tr>\n";
-echo "   <tr><td colspan='".($SIZE + 2)."' align='center'><form action='info.php' method='get'><input type='submit' value='Inapoi'></form></td></tr>\n";
+echo "   <tr><td colspan='".($SIZE+2)."'></td></tr>\n";
+echo "   <tr><td colspan='".($SIZE+2)."' align='center'><form action='info.php' method='get'><input type='submit' value='Inapoi'></form></td></tr>\n";
 echo "  </table>\n";
 echo " </body>\n";
 echo "</html>\n";

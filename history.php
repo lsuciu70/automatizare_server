@@ -1,4 +1,5 @@
 <?php                         
+// make client to refresh every 10 seconds
 $url1=$_SERVER['REQUEST_URI'];
 header("Refresh: 10; URL=$url1");
 
@@ -6,6 +7,7 @@ $HOURS = 5;
 $MEAS_PER_HOUR = 6;
 $SIZE = $HOURS * $MEAS_PER_HOUR;
 
+// current date and time
 $format = "%Y.%m.%d %H:%M:%S";
 $now_ts = strftime($format);
 sscanf($now_ts, "%d.%d.%d %d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
