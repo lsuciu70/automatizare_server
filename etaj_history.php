@@ -1,13 +1,13 @@
-<?php                         
+<?php
 // make client to refresh every 10 seconds
-$url1=$_SERVER['REQUEST_URI'];
-header("Refresh: 10; URL=$url1");
+// $url1=$_SERVER['REQUEST_URI'];
+// header("Refresh: 10; URL=$url1");
 
-$HOURS = 6;
+$HOURS = 24;
 $MEAS_PER_HOUR = 6;
 $SIZE = $HOURS * $MEAS_PER_HOUR;
 
-// current date and time
+//// current date and time
 $format = "%Y.%m.%d %H:%M:%S";
 $now_ts = strftime($format);
 sscanf($now_ts, "%d.%d.%d %d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
@@ -126,7 +126,6 @@ if($ok === FALSE)
 }
 
 $lines = array();
-$count = 0;
 $jos_file_name = "data/jos_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
 if(is_file($jos_file_name))
 {
@@ -150,10 +149,10 @@ if(is_file($jos_file_name))
 }
 if($count <= $SIZE)
 {
-  $sus_file_name = "data/sus_" . $ts_yY . "." . $ts_yM . "." . $ts_yD . ".txt";
-  if(is_file($sus_file_name))
+  $jos_file_name = "data/jos_" . $ts_yY . "." . $ts_yM . "." . $ts_yD . ".txt";
+  if(is_file($jos_file_name))
   {
-    $file = new SplFileObject($sus_file_name);
+    $file = new SplFileObject($jos_file_name);
     if($file->isReadable())
     {
       $file->seek($file->getSize());
@@ -202,6 +201,7 @@ for($i = 1; $i <= $SIZE; ++$i)
 }
 
 $lines = array();
+$count = 0;
 $sus_file_name = "data/sus_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
 if(is_file($sus_file_name))
 {
@@ -277,6 +277,149 @@ for($i = 1; $i <= $SIZE; ++$i)
 }
 $lines = array();
 // var_dump($vn);
+
+// images
+if(is_file("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"))
+  $fontfile = "/usr/share/fonts/truetype/freefont/FreeSerif.ttf";
+else if(is_file("/opt/share/fonts/bitstream-vera/VeraSe.ttf"))
+  $fontfile = "/opt/share/fonts/bitstream-vera/VeraSe.ttf";
+
+$max_all = 0; $min_all = 0;
+$max_dl = 0; $min_dl = 0;
+for($i = 0; $i <= $SIZE; ++$i)
+{
+  if(($dl = $vn["dl"][$i]) > 0)
+  {
+    if($max_dl < $dl)
+      $max_dl = $dl;
+    if($min_dl === 0 || $min_dl > $dl)
+      $min_dl = $dl;
+    if($max_all < $max_dl)
+      $max_all = $max_dl;
+    if($min_all === 0 || $min_all > $min_dl)
+      $min_all = $min_dl;
+  }
+}
+//var_dump($max_all);
+$max_all = $max_all - ($max_all % 10) + 20;
+//var_dump($max_all);
+
+//var_dump($min_all);
+$min_all  = $min_all - ($min_all % 10) - 10;
+//var_dump($min_all);
+
+//// dot radius
+$rad = 8;
+//// font size
+$fsz = 12;
+//// height & width temperature coeficient
+$h_c = 1;
+$w_c = 6;
+
+//// temperature text width & height
+$temp_box = imagettfbbox($fsz, 0, $fontfile, "00.00");
+$temp_w = $temp_box[2] - $temp_box[0];
+$temp_h = $temp_box[1] - $temp_box[7];
+// echo "temp_w=".$temp_w.", temp_h=".$temp_h."\n";
+//// time text width & height
+$time_box = imagettfbbox($fsz, 0, $fontfile, "00:00-00:00");
+$time_w = $time_box[2] - $time_box[0];
+$time_h = $time_box[1] - $time_box[7];
+// echo "time_w=".$time_w.", time_h=".$time_h."\n";
+//// "Dormitor Luca" text width & height
+$dl_str = "Dormitor Luca";
+$dl_box = imagettfbbox($fsz, 0, $fontfile, $dl_str);
+$dl_w = $dl_box[2] - $dl_box[0];
+$dl_h = $dl_box[1] - $dl_box[7];
+
+//// lelft and right gaps
+$l_gap = 2 * $rad + $temp_w;
+$r_gap = $l_gap;
+//// bottom and top gaps
+$b_gap = 3 * $rad + $time_h;
+$t_gap = 2 * $rad + $dl_h;
+
+//// image width
+$im_w = (2 * $SIZE + 1) * $w_c + $l_gap + $r_gap;
+$im_h = ($max_all - $min_all) * $h_c + $b_gap + $t_gap;
+
+//// the image object
+$dl_im = imagecreatetruecolor($im_w, $im_h);
+//// make white background
+$white_color = imagecolorallocate($dl_im, 255, 255, 255);
+imagefill($dl_im, 0, 0, $white_color);
+//// color black
+$black_color = imagecolorallocate($dl_im, 0, 0, 0);
+//// color blue
+$blue_color = imagecolorallocate($dl_im, 0, 0, 255);
+//// color red
+$red_color = imagecolorallocate($dl_im, 255, 0, 0);
+
+//// Dormitor Luca
+imagettftext($dl_im, $fsz, 0, ($im_w / 2 - $dl_w / 2), ($rad + $dl_h), $black_color, $fontfile, $dl_str);
+
+$dl_max_done = FALSE; $dl_min_done = FALSE;
+for($i = $SIZE; $i >= 0; --$i)
+{
+  $dl = $vn["dl"][$i];
+
+  $dl_x = $l_gap + 2 * $w_c * ($SIZE - $i);
+  $dl_y = $im_h - (($dl - $min_all) * $h_c + $b_gap);
+
+  if($vn["dl_r"][$i] === 0)
+    $fg_color = $blue_color;
+  else
+    $fg_color = $red_color;
+  imagefilledellipse($dl_im, $dl_x, $dl_y, $rad, $rad, $fg_color);
+  if(($dl_max_done === FALSE && ($dl_max_done = ($dl === $max_dl)) === TRUE) ||
+     ($dl_min_done === FALSE && ($dl_min_done = ($dl === $min_dl)) === TRUE)  ||
+     ($i === 0 && ($max_dl - $dl) * $h_c > $temp_h + $rad && ($dl - $min_dl) * $h_c > $temp_h + $rad) ||
+     ($i === $SIZE && ($max_dl - $dl) * $h_c > $temp_h + $rad && ($dl - $min_dl) * $h_c > $temp_h + $rad))
+  {
+    $p_zec = $dl % 100; $p_int = ($dl - $p_zec) / 100;
+    $dl_temp = sprintf("%2d.%02d", $p_int, $p_zec);
+    // write temperature (left text)
+    imagettftext($dl_im, $fsz, 0, ($im_w - $rad - $temp_w), ($dl_y + ($fsz / 2)), $black_color, $fontfile, $dl_temp);
+    // imageline ( resource $image , int $x1 , int $y1 , int $x2 , int $y2 , int $color )
+    imageline($dl_im, $dl_x, $dl_y, ($im_w - $r_gap), $dl_y, $black_color);
+  }
+}
+
+//// time
+$hm_y = $im_h - $b_gap;
+$hm_x = 0;
+for($i = $SIZE; $i >= 0; --$i)
+{
+  if($i === $SIZE || $i === 0 || (($i % $MEAS_PER_HOUR) === 0 && ($SIZE - $i) > 1))
+  {
+    $hm = $vn["hm"][$i];
+    $hm_x_new = $l_gap + 2 * $w_c * ($SIZE - $i);
+    if($hm_x > 0 && $hm_x_new - $hm_x < $time_w + $w_c)
+      continue;
+    $hm_x = $hm_x_new;
+    imagettftext($dl_im, $fsz, 0, ($hm_x + $rad - $time_w / 2), $im_h - $rad, $black_color, $fontfile, $hm);
+    imageline($dl_im, $hm_x, $hm_y, $hm_x, $t_gap, $black_color);
+  }
+}
+
+//// max temperature
+$p_zec = $max_all % 100; $p_int = ($max_all - $p_zec) / 100;
+$max_str = sprintf("%2d.%02d", $p_int, $p_zec);
+$max_x = $l_gap - $rad; $max_y = $im_h - (($max_all - $min_all) * $h_c + $b_gap);
+imagettftext($dl_im, $fsz, 0, $rad, ($max_y + ($fsz / 2)), $black_color, $fontfile, $max_str);
+imageline($dl_im, $max_x, $max_y, ($im_w - $r_gap), $max_y, $black_color);
+//// min temperature
+$p_zec = $min_all % 100; $p_int = ($min_all - $p_zec) / 100;
+$min_str = sprintf("%2d.%02d", $p_int, $p_zec);
+$min_x = $l_gap - $rad; $min_y = $im_h - $b_gap;
+imagettftext($dl_im, $fsz, 0, $rad, ($min_y + ($fsz / 2)), $black_color, $fontfile, $min_str);
+imageline($dl_im, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
+
+//// save as jpeg
+imagejpeg($dl_im, 'data/dl.jpg');
+// Free up memory
+imagedestroy($dl_im);
+exit;
 
 echo "<html>\n";
 echo " <head>\n";
