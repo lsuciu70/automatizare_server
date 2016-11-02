@@ -1,4 +1,37 @@
 <?php
+// authentication
+if (!isset($_SERVER['PHP_AUTH_USER']))
+{
+  header('WWW-Authenticate: Basic realm="CLLS Programming"');
+  header('HTTP/1.0 401 Unauthorized');
+  die ("401 - Not authorized; authentication required!");
+}
+
+$valid_passwords = array();
+$users_file = fopen("data/.users", "r");
+while (($line = fgets($users_file)) !== FALSE)
+{
+  sscanf($line, "%s = %s", $user, $passwd);
+  $valid_passwords[$user] = $passwd;
+}
+$valid_users = array_keys($valid_passwords);
+
+$user = $_SERVER['PHP_AUTH_USER'];
+$pass = crypt($_SERVER['PHP_AUTH_PW'], "tra-la-la");
+
+$validated = (in_array($user, $valid_users)) && ($pass == $valid_passwords[$user]);
+
+if (!$validated)
+{
+  header('WWW-Authenticate: Basic realm="CLLS Programming"');
+  header('HTTP/1.0 401 Unauthorized');
+  die ("401 - Not authorized; wrong user or password!");
+}
+
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+
 // variables
 $room = "unknown";
 $room_name = array("Bucatarie", "Living", "Birou", "Baie parter", "Camera Luca", "Dormitor matrimonial", "Dormitor oaspeti", "Baie etaj");
