@@ -177,6 +177,12 @@ echo "   </tr>\n";
 if($is_sus)
 {
   echo "   <tr><td colspan='5'></td></tr>\n";
+  echo "   <tr>\n";
+  echo "    <th>Etaj</th>\n";
+  echo "    <td align='center'><form action='etaj_history.php' method='get'><input type='submit' value='Istoric (grafic)'></form></td>\n";
+  echo "    <td colspan='3'></td>\n";
+  echo "   </tr>\n";
+  echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
   echo "   <!-- room: Camera Luca -->\n";
   echo "   <tr>\n";
@@ -216,6 +222,12 @@ if($is_sus)
 }
 if($is_jos)
 {
+  echo "   <tr><td colspan='5'></td></tr>\n";
+  echo "   <tr>\n";
+  echo "    <th>Parter</th>\n";
+  echo "    <td align='center'><form action='parter_history.php' method='get'><input type='submit' value='Istoric (grafic)'></form></td>\n";
+  echo "    <td colspan='3'></td>\n";
+  echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
   echo "   <!-- room: Bucatarie -->\n";
