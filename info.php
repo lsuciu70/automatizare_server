@@ -133,21 +133,6 @@ for ($i = 0 ; $i < 8 ; $i++)
   }
 }
 
-// logs
-$log = array();
-$log_count = 0;
-$log_file_name = "/opt/www/data/log_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-$is_log_file = is_file($log_file_name);
-if($is_log_file)
-{
-  $log_file = fopen($log_file_name, "r");
-  while (($line = fgets($log_file)) !== FALSE)
-  {
-    $log[$log_count] = $line;
-    ++$log_count;
-  }
-}
-
 echo "<!DOCTYPE html>\n";
 echo "<html>\n";
 echo " <head>\n";
@@ -179,8 +164,7 @@ if($is_sus)
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th>Etaj</th>\n";
-  echo "    <td align='center'><form action='etaj_history.php' method='get'><input type='submit' value='Istoric (grafic)'></form></td>\n";
-  echo "    <td colspan='3'></td>\n";
+  echo "    <td align='left' colspan='4'><form action='etaj_day_history.php' method='get'><input type='submit' value='Istoric'></form></td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
@@ -225,8 +209,7 @@ if($is_jos)
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th>Parter</th>\n";
-  echo "    <td align='center'><form action='parter_history.php' method='get'><input type='submit' value='Istoric (grafic)'></form></td>\n";
-  echo "    <td colspan='3'></td>\n";
+  echo "    <td align='left' colspan='4'><form action='parter_day_history.php' method='get'><input type='submit' value='Istoric'></form></td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
@@ -266,20 +249,7 @@ if($is_jos)
   echo "    <td align='center'><form action='programming.php' method='post'><input type='hidden' name='t_loc' value='parter'><input type='hidden' name='t_room' value='3'><input type='submit' value='Programare'></form></td>\n";
   echo "   </tr>\n";
 }
-echo "   <tr><td colspan='5'></td></tr>\n";
-echo "   <tr><td colspan='5' align='center'><form action='history.php' method='get'><input type='submit' value='Istoric'></form></td></tr>\n";
 echo "  </table>\n";
-// show logs
-if($log_count > 0)
-{
-echo "  <p>Log:</p>\n";
-echo "  <p>\n";
-for($i = ($log_count - 1); $i >= 0; --$i)
-  {
-echo "   ".$log[$i]."<br>\n";
-  }
-}
-echo "  </p>\n";
 echo " </body>\n";
 echo "</html>\n";
 ?>

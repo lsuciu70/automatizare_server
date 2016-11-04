@@ -1,5 +1,5 @@
 <?php
-// make client to refresh every 60 seconds
+// make cc2ent to refresh every 60 seconds
 $url1=$_SERVER['REQUEST_URI'];
 header("Refresh: 60; URL=$url1");
 
@@ -16,14 +16,14 @@ sscanf($y_day, "%d.%d.%d", $ts_yY, $ts_yM, $ts_yD);
 
 $vn = array (
     "hm" => array(),
-    "bu" => array(),
-    "bu_r" => array(),
-    "li" => array(),
-    "li_r" => array(),
-    "bi" => array(),
-    "bi_r" => array(),
-    "bj" => array(),
-    "bj_r" => array(),
+    "c1" => array(),
+    "c1_r" => array(),
+    "c2" => array(),
+    "c2_r" => array(),
+    "c3" => array(),
+    "c3_r" => array(),
+    "c4" => array(),
+    "c4_r" => array(),
 );
 
 $m_start = $ts_m - ($ts_m % 10);
@@ -60,34 +60,34 @@ $ok = FALSE;
 $file_name = "data/jos_avg.txt";
 if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
 {
-  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
+  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_c1, $t_c1_r, $t_c2, $t_c2_r, $t_c3, $t_c3_r, $t_c4, $t_c4_r, $jos_dt);
   if(strpos($jos_dt, $hm_start) === 0)
   {
     // ok
     $ok = TRUE;
-    $vn["bu"][0] = $t_bu;
-    $vn["bu_r"][0] = $t_bu_r;
-    $vn["li"][0] = $t_li;
-    $vn["li_r"][0] = $t_li_r;
-    $vn["bi"][0] = $t_bi;
-    $vn["bi_r"][0] = $t_bi_r;
-    $vn["bj"][0] = $t_bj;
-    $vn["bj_r"][0] = $t_bj_r;
+    $vn["c1"][0] = $t_c1;
+    $vn["c1_r"][0] = $t_c1_r;
+    $vn["c2"][0] = $t_c2;
+    $vn["c2_r"][0] = $t_c2_r;
+    $vn["c3"][0] = $t_c3;
+    $vn["c3_r"][0] = $t_c3_r;
+    $vn["c4"][0] = $t_c4;
+    $vn["c4_r"][0] = $t_c4_r;
   }
 }
 if($ok === FALSE)
 {
-  $vn["bu"][0] = 0;
-  $vn["bu_r"][0] = 0;
-  $vn["li"][0] = 0;
-  $vn["li_r"][0] = 0;
-  $vn["bi"][0] = 0;
-  $vn["bi_r"][0] = 0;
-  $vn["bj"][0] = 0;
-  $vn["bj_r"][0] = 0;
+  $vn["c1"][0] = 0;
+  $vn["c1_r"][0] = 0;
+  $vn["c2"][0] = 0;
+  $vn["c2_r"][0] = 0;
+  $vn["c3"][0] = 0;
+  $vn["c3_r"][0] = 0;
+  $vn["c4"][0] = 0;
+  $vn["c4_r"][0] = 0;
 }
 
-$lines = array();
+$c2nes = array();
 $jos_file_name = "data/jos_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
 $count = $SIZE + 1;
 if(is_file($jos_file_name))
@@ -96,17 +96,17 @@ if(is_file($jos_file_name))
   if($file->isReadable())
   {
     $file->seek($file->getSize());
-    $curr_line = $file->key();
+    $curr_c2ne = $file->key();
     $count = 0;
-    while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
+    while ((--$curr_c2ne) >= 0 && (++$count) <= $SIZE)
     {
-      $file->seek($curr_line);
-      $line = $file->current();
-      if(($idx = strrpos($line, ",")) !== FALSE)
+      $file->seek($curr_c2ne);
+      $c2ne = $file->current();
+      if(($idx = strrpos($c2ne, ",")) !== FALSE)
       {
-        $key = substr($line, $idx + 1, 11);
+        $key = substr($c2ne, $idx + 1, 11);
       }
-      $lines[$key] = $line;
+      $c2nes[$key] = $c2ne;
     }
   }
 }
@@ -119,16 +119,16 @@ if($count <= $SIZE)
     if($file->isReadable())
     {
       $file->seek($file->getSize());
-      $curr_line = $file->key();
-      while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
+      $curr_c2ne = $file->key();
+      while ((--$curr_c2ne) >= 0 && (++$count) <= $SIZE)
       {
-        $file->seek($curr_line);
-        $line = $file->current();
-        if(($idx = strrpos($line, ",")) !== FALSE)
+        $file->seek($curr_c2ne);
+        $c2ne = $file->current();
+        if(($idx = strrpos($c2ne, ",")) !== FALSE)
         {
-          $key = substr($line, $idx + 1, 11);
+          $key = substr($c2ne, $idx + 1, 11);
         }
-        $lines[$key] = $line;
+        $c2nes[$key] = $c2ne;
       }
     }
   }
@@ -137,29 +137,29 @@ if($count <= $SIZE)
 for($i = 1; $i <= $SIZE; ++$i)
 {
   $key = $vn["hm"][$i];
-  if(array_key_exists($key, $lines))
+  if(array_key_exists($key, $c2nes))
   {
-    $line = $lines[$key];
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
-    $vn["bu"][$i] = $t_bu;
-    $vn["bu_r"][$i] = $t_bu_r;
-    $vn["li"][$i] = $t_li;
-    $vn["li_r"][$i] = $t_li_r;
-    $vn["bi"][$i] = $t_bi;
-    $vn["bi_r"][$i] = $t_bi_r;
-    $vn["bj"][$i] = $t_bj;
-    $vn["bj_r"][$i] = $t_bj_r;
+    $c2ne = $c2nes[$key];
+    sscanf($c2ne, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_c1, $t_c1_r, $t_c2, $t_c2_r, $t_c3, $t_c3_r, $t_c4, $t_c4_r, $jos_dt);
+    $vn["c1"][$i] = $t_c1;
+    $vn["c1_r"][$i] = $t_c1_r;
+    $vn["c2"][$i] = $t_c2;
+    $vn["c2_r"][$i] = $t_c2_r;
+    $vn["c3"][$i] = $t_c3;
+    $vn["c3_r"][$i] = $t_c3_r;
+    $vn["c4"][$i] = $t_c4;
+    $vn["c4_r"][$i] = $t_c4_r;
   }
   else
   {
-    $vn["bu"][$i] = 0;
-    $vn["bu_r"][$i] = 0;
-    $vn["li"][$i] = 0;
-    $vn["li_r"][$i] = 0;
-    $vn["bi"][$i] = 0;
-    $vn["bi_r"][$i] = 0;
-    $vn["bj"][$i] = 0;
-    $vn["bj_r"][$i] = 0;
+    $vn["c1"][$i] = 0;
+    $vn["c1_r"][$i] = 0;
+    $vn["c2"][$i] = 0;
+    $vn["c2_r"][$i] = 0;
+    $vn["c3"][$i] = 0;
+    $vn["c3_r"][$i] = 0;
+    $vn["c4"][$i] = 0;
+    $vn["c4_r"][$i] = 0;
   }
 }
 
@@ -170,40 +170,40 @@ else if(is_file("/opt/share/fonts/bitstream-vera/VeraSe.ttf"))
   $fontfile = "/opt/share/fonts/bitstream-vera/VeraSe.ttf";
 
 $max_all = 0; $min_all = 0;
-$max_bu = 0; $min_bu = 0;
-$max_li = 0; $min_li = 0;
-$max_bi = 0; $min_bi = 0;
-$max_bj = 0; $min_bj = 0;
+$max_c1 = 0; $min_c1 = 0;
+$max_c2 = 0; $min_c2 = 0;
+$max_c3 = 0; $min_c3 = 0;
+$max_c4 = 0; $min_c4 = 0;
 
 for($i = 0; $i <= $SIZE; ++$i)
 {
-  if(($bu = $vn["bu"][$i]) > 0)
+  if(($c1 = $vn["c1"][$i]) > 0)
   {
-    if($max_bu < $bu) $max_bu = $bu;
-    if($min_bu === 0 || $min_bu > $bu) $min_bu = $bu;
-    if($max_all < $max_bu) $max_all = $max_bu;
-    if($min_all === 0 || $min_all > $min_bu) $min_all = $min_bu;
+    if($max_c1 < $c1) $max_c1 = $c1;
+    if($min_c1 === 0 || $min_c1 > $c1) $min_c1 = $c1;
+    if($max_all < $max_c1) $max_all = $max_c1;
+    if($min_all === 0 || $min_all > $min_c1) $min_all = $min_c1;
   }
-  if(($li = $vn["li"][$i]) > 0)
+  if(($c2 = $vn["c2"][$i]) > 0)
   {
-    if($max_li < $li) $max_li = $li;
-    if($min_li === 0 || $min_li > $li) $min_li = $li;
-    if($max_all < $max_li) $max_all = $max_li;
-    if($min_all === 0 || $min_all > $min_li) $min_all = $min_li;
+    if($max_c2 < $c2) $max_c2 = $c2;
+    if($min_c2 === 0 || $min_c2 > $c2) $min_c2 = $c2;
+    if($max_all < $max_c2) $max_all = $max_c2;
+    if($min_all === 0 || $min_all > $min_c2) $min_all = $min_c2;
   }
-  if(($bi = $vn["bi"][$i]) > 0)
+  if(($c3 = $vn["c3"][$i]) > 0)
   {
-    if($max_bi < $bi) $max_bi = $bi;
-    if($min_bi === 0 || $min_bi > $bi) $min_bi = $bi;
-    if($max_all < $max_bi) $max_all = $max_bi;
-    if($min_all === 0 || $min_all > $min_bi) $min_all = $min_bi;
+    if($max_c3 < $c3) $max_c3 = $c3;
+    if($min_c3 === 0 || $min_c3 > $c3) $min_c3 = $c3;
+    if($max_all < $max_c3) $max_all = $max_c3;
+    if($min_all === 0 || $min_all > $min_c3) $min_all = $min_c3;
   }
-  if(($bj = $vn["bj"][$i]) > 0)
+  if(($c4 = $vn["c4"][$i]) > 0)
   {
-    if($max_bj < $bj) $max_bj = $bj;
-    if($min_bj === 0 || $min_bj > $bj) $min_bj = $bj;
-    if($max_all < $max_bj) $max_all = $max_bj;
-    if($min_all === 0 || $min_all > $min_bj) $min_all = $min_bj;
+    if($max_c4 < $c4) $max_c4 = $c4;
+    if($min_c4 === 0 || $min_c4 > $c4) $min_c4 = $c4;
+    if($max_all < $max_c4) $max_all = $max_c4;
+    if($min_all === 0 || $min_all > $min_c4) $min_all = $min_c4;
   }
 }
 
@@ -229,12 +229,12 @@ $time_w = $time_box[2] - $time_box[0];
 $time_h = $time_box[1] - $time_box[7];
 // echo "time_w=".$time_w.", time_h=".$time_h."\n";
 //// Title text width & height
-$bu_str = "Bucatarie"; $bu_box = imagettfbbox($fsz, 0, $fontfile, $bu_str); $bu_w = $bu_box[2] - $bu_box[0]; $bu_h = $bu_box[1] - $bu_box[7];
-$li_str = "Living"; $li_box = imagettfbbox($fsz, 0, $fontfile, $li_str); $li_w = $li_box[2] - $li_box[0]; $li_h = $li_box[1] - $li_box[7];
-$bi_str = "Birou"; $bi_box = imagettfbbox($fsz, 0, $fontfile, $bi_str); $bi_w = $bi_box[2] - $bi_box[0]; $bi_h = $bi_box[1] - $bi_box[7];
-$bj_str = "Baie jos"; $bj_box = imagettfbbox($fsz, 0, $fontfile, $bj_str); $bj_w = $bj_box[2] - $bj_box[0]; $bj_h = $bj_box[1] - $bj_box[7];
-$title_w = $bu_w + $li_w + $bi_w + $bj_w;
-$title_h = $bi_h;
+$c1_str = "Bucatarie"; $c1_box = imagettfbbox($fsz, 0, $fontfile, $c1_str); $c1_w = $c1_box[2] - $c1_box[0]; $c1_h = $c1_box[1] - $c1_box[7];
+$c2_str = "Living"; $c2_box = imagettfbbox($fsz, 0, $fontfile, $c2_str); $c2_w = $c2_box[2] - $c2_box[0]; $c2_h = $c2_box[1] - $c2_box[7];
+$c3_str = "Birou"; $c3_box = imagettfbbox($fsz, 0, $fontfile, $c3_str); $c3_w = $c3_box[2] - $c3_box[0]; $c3_h = $c3_box[1] - $c3_box[7];
+$c4_str = "Baie jos"; $c4_box = imagettfbbox($fsz, 0, $fontfile, $c4_str); $c4_w = $c4_box[2] - $c4_box[0]; $c4_h = $c4_box[1] - $c4_box[7];
+$title_w = $c1_w + $c2_w + $c3_w + $c4_w;
+$title_h = $c3_h;
 
 //// lelft and right gaps
 $l_gap = 2 * $rad + $temp_w;
@@ -260,119 +260,119 @@ $yellow_color = imagecolorallocate($image, 255, 255, 0);
 $green_color = imagecolorallocate($image, 0, 255, 0);
 $orange_color = imagecolorallocate($image, 255, 128, 0);
 
-$bu_color = $green_color;
-$li_color = $orange_color;
-$bi_color = $blue_color;
-$bj_color = $red_color;
+$c1_color = $green_color;
+$c2_color = $orange_color;
+$c3_color = $blue_color;
+$c4_color = $red_color;
 
 //// title
 $title_w += 4 * 10 * $w_c + 7 * $rad;
 $title_x = $im_w / 2 - $title_w / 2;
 $title_y = $rad + $title_h;
 $hth = intval($title_h / 2);
-// bu
-imagettftext($image, $fsz, 0, $title_x, $title_y, $bu_color, $fontfile, $bu_str);
-$title_x += $rad + $bu_w; $title_y -= $hth;
+// c1
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c1_color, $fontfile, $c1_str);
+$title_x += $rad + $c1_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $bu_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c1_color);
 }
-// li
+// c2
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $li_color, $fontfile, $li_str);
-$title_x += $rad + $li_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c2_color, $fontfile, $c2_str);
+$title_x += $rad + $c2_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $li_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c2_color);
 }
-// bi
+// c3
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $bi_color, $fontfile, $bi_str);
-$title_x += $rad + $bi_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c3_color, $fontfile, $c3_str);
+$title_x += $rad + $c3_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $bi_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c3_color);
 }
-// bj
+// c4
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $bj_color, $fontfile, $bj_str);
-$title_x += $rad + $bj_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c4_color, $fontfile, $c4_str);
+$title_x += $rad + $c4_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $bj_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c4_color);
 }
 
 // Etaj
-$bu_x_prev = 0; $bu_y_prev = 0; $bu_r_prev = 0;
-$li_x_prev = 0; $li_y_prev = 0; $li_r_prev = 0;
-$bi_x_prev = 0; $bi_y_prev = 0; $bi_r_prev = 0;
-$bj_x_prev = 0; $bj_y_prev = 0; $bj_r_prev = 0;
+$c1_x_prev = 0; $c1_y_prev = 0; $c1_r_prev = 0;
+$c2_x_prev = 0; $c2_y_prev = 0; $c2_r_prev = 0;
+$c3_x_prev = 0; $c3_y_prev = 0; $c3_r_prev = 0;
+$c4_x_prev = 0; $c4_y_prev = 0; $c4_r_prev = 0;
 
 for($i = $SIZE; $i >= 0; --$i)
 {
   // Dormitor Luca
-  $bu = $vn["bu"][$i]; $bu_r = $vn["bu_r"][$i];
+  $c1 = $vn["c1"][$i]; $c1_r = $vn["c1_r"][$i];
 
-  $bu_x = $l_gap + 2 * $w_c * ($SIZE - $i); $bu_y = $im_h - (($bu - $min_img) * $h_c + $b_gap);
-  if($bu_x_prev === 0 && $bu_y_prev === 0) { $bu_x_prev = $bu_x; $bu_y_prev = $bu_y; $bu_r_prev = $bu_r; }
+  $c1_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
+  if($c1_x_prev === 0 && $c1_y_prev === 0) { $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r; }
 
-  imageline($image, $bu_x_prev, $bu_y_prev - 2, $bu_x, $bu_y - 2, $bu_color);
-  imageline($image, $bu_x_prev, $bu_y_prev + 2, $bu_x, $bu_y + 2, $bu_color);
-  if($bu_r_prev !== 0)
+  imageline($image, $c1_x_prev, $c1_y_prev - 2, $c1_x, $c1_y - 2, $c1_color);
+  imageline($image, $c1_x_prev, $c1_y_prev + 2, $c1_x, $c1_y + 2, $c1_color);
+  if($c1_r_prev !== 0)
   {
-    imageline($image, $bu_x_prev, $bu_y_prev - 1, $bu_x, $bu_y - 1, $bu_color);
-    imageline($image, $bu_x_prev, $bu_y_prev, $bu_x, $bu_y, $bu_color);
-    imageline($image, $bu_x_prev, $bu_y_prev + 1, $bu_x, $bu_y + 1, $bu_color);
+    imageline($image, $c1_x_prev, $c1_y_prev - 1, $c1_x, $c1_y - 1, $c1_color);
+    imageline($image, $c1_x_prev, $c1_y_prev, $c1_x, $c1_y, $c1_color);
+    imageline($image, $c1_x_prev, $c1_y_prev + 1, $c1_x, $c1_y + 1, $c1_color);
   }
-  $bu_x_prev = $bu_x; $bu_y_prev = $bu_y; $bu_r_prev = $bu_r;
+  $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r;
 
   // Dormitor matrimonial
-  $li = $vn["li"][$i]; $li_r = $vn["li_r"][$i];
+  $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
 
-  $li_x = $l_gap + 2 * $w_c * ($SIZE - $i); $li_y = $im_h - (($li - $min_img) * $h_c + $b_gap);
-  if($li_x_prev === 0 && $li_y_prev === 0) { $li_x_prev = $li_x; $li_y_prev = $li_y; $li_r_prev = $li_r; }
+  $c2_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
+  if($c2_x_prev === 0 && $c2_y_prev === 0) { $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r; }
 
-  imageline($image, $li_x_prev, $li_y_prev - 2, $li_x, $li_y - 2, $li_color);
-  imageline($image, $li_x_prev, $li_y_prev + 2, $li_x, $li_y + 2, $li_color);
-  if($li_r_prev !== 0)
+  imageline($image, $c2_x_prev, $c2_y_prev - 2, $c2_x, $c2_y - 2, $c2_color);
+  imageline($image, $c2_x_prev, $c2_y_prev + 2, $c2_x, $c2_y + 2, $c2_color);
+  if($c2_r_prev !== 0)
   {
-    imageline($image, $li_x_prev, $li_y_prev - 1, $li_x, $li_y - 1, $li_color);
-    imageline($image, $li_x_prev, $li_y_prev, $li_x, $li_y, $li_color);
-    imageline($image, $li_x_prev, $li_y_prev + 1, $li_x, $li_y + 1, $li_color);
+    imageline($image, $c2_x_prev, $c2_y_prev - 1, $c2_x, $c2_y - 1, $c2_color);
+    imageline($image, $c2_x_prev, $c2_y_prev, $c2_x, $c2_y, $c2_color);
+    imageline($image, $c2_x_prev, $c2_y_prev + 1, $c2_x, $c2_y + 1, $c2_color);
   }
-  $li_x_prev = $li_x; $li_y_prev = $li_y; $li_r_prev = $li_r;
+  $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r;
 
   // Dormitor oaspeti
-  $bi = $vn["bi"][$i]; $bi_r = $vn["bi_r"][$i];
+  $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
 
-  $bi_x = $l_gap + 2 * $w_c * ($SIZE - $i); $bi_y = $im_h - (($bi - $min_img) * $h_c + $b_gap);
-  if($bi_x_prev === 0 && $bi_y_prev === 0) { $bi_x_prev = $bi_x; $bi_y_prev = $bi_y; $bi_r_prev = $bi_r; }
+  $c3_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
+  if($c3_x_prev === 0 && $c3_y_prev === 0) { $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r; }
 
-  imageline($image, $bi_x_prev, $bi_y_prev - 2, $bi_x, $bi_y - 2, $bi_color);
-  imageline($image, $bi_x_prev, $bi_y_prev + 2, $bi_x, $bi_y + 2, $bi_color);
-  if($bi_r_prev !== 0)
+  imageline($image, $c3_x_prev, $c3_y_prev - 2, $c3_x, $c3_y - 2, $c3_color);
+  imageline($image, $c3_x_prev, $c3_y_prev + 2, $c3_x, $c3_y + 2, $c3_color);
+  if($c3_r_prev !== 0)
   {
-    imageline($image, $bi_x_prev, $bi_y_prev - 1, $bi_x, $bi_y - 1, $bi_color);
-    imageline($image, $bi_x_prev, $bi_y_prev, $bi_x, $bi_y, $bi_color);
-    imageline($image, $bi_x_prev, $bi_y_prev + 1, $bi_x, $bi_y + 1, $bi_color);
+    imageline($image, $c3_x_prev, $c3_y_prev - 1, $c3_x, $c3_y - 1, $c3_color);
+    imageline($image, $c3_x_prev, $c3_y_prev, $c3_x, $c3_y, $c3_color);
+    imageline($image, $c3_x_prev, $c3_y_prev + 1, $c3_x, $c3_y + 1, $c3_color);
   }
-  $bi_x_prev = $bi_x; $bi_y_prev = $bi_y; $bi_r_prev = $bi_r;
+  $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r;
 
   // Baie jos
-  $bj = $vn["bj"][$i]; $bj_r = $vn["bj_r"][$i];
+  $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
 
-  $bj_x = $l_gap + 2 * $w_c * ($SIZE - $i); $bj_y = $im_h - (($bj - $min_img) * $h_c + $b_gap);
-  if($bj_x_prev === 0 && $bj_y_prev === 0) { $bj_x_prev = $bj_x; $bj_y_prev = $bj_y; $bj_r_prev = $bj_r; }
+  $c4_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
+  if($c4_x_prev === 0 && $c4_y_prev === 0) { $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r; }
 
-  imageline($image, $bj_x_prev, $bj_y_prev - 2, $bj_x, $bj_y - 2, $bj_color);
-  imageline($image, $bj_x_prev, $bj_y_prev + 2, $bj_x, $bj_y + 2, $bj_color);
-  if($bj_r_prev !== 0)
+  imageline($image, $c4_x_prev, $c4_y_prev - 2, $c4_x, $c4_y - 2, $c4_color);
+  imageline($image, $c4_x_prev, $c4_y_prev + 2, $c4_x, $c4_y + 2, $c4_color);
+  if($c4_r_prev !== 0)
   {
-    imageline($image, $bj_x_prev, $bj_y_prev - 1, $bj_x, $bj_y - 1, $bj_color);
-    imageline($image, $bj_x_prev, $bj_y_prev, $bj_x, $bj_y, $bj_color);
-    imageline($image, $bj_x_prev, $bj_y_prev + 1, $bj_x, $bj_y + 1, $bj_color);
+    imageline($image, $c4_x_prev, $c4_y_prev - 1, $c4_x, $c4_y - 1, $c4_color);
+    imageline($image, $c4_x_prev, $c4_y_prev, $c4_x, $c4_y, $c4_color);
+    imageline($image, $c4_x_prev, $c4_y_prev + 1, $c4_x, $c4_y + 1, $c4_color);
   }
-  $bj_x_prev = $bj_x; $bj_y_prev = $bj_y; $bj_r_prev = $bj_r;
+  $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r;
 
 }
 //// time
@@ -459,9 +459,9 @@ echo "  <style>\n";
 echo "   html { height:100%; min-height:100%; width:100%; min-width:100%; }\n";
 echo "   body { font-size:large; }\n";
 echo "   input { font-size:large; }\n";
-echo "   table { border-collapse:collapse; border-style:solid; }\n";
-echo "   th { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
-echo "   td { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
+echo "   table { border-collapse:collapse; border-style:soc2d; }\n";
+echo "   th { padding:5px; border-style:soc2d; border-width:thin; width:10em; }\n";
+echo "   td { padding:5px; border-style:soc2d; border-width:thin; width:10em; }\n";
 echo "  </style>\n";
 echo " </head>\n";
 echo " <body>\n";

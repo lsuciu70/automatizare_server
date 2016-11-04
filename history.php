@@ -314,7 +314,7 @@ echo "   </tr>\n";
 for($i = 0; $i <= $SIZE; ++$i)
 {
   echo "   <tr>\n";  
-  echo "    <th align='center'>".$vn["hm"][$i]."</th>\n";
+  echo "    <td align='center'>".$vn["hm"][$i]."</td>\n";
 
   $p_zec = $vn["dl"][$i] % 100; $p_int = ($vn["dl"][$i] - $p_zec) / 100;
   $color = ($vn["dl_r"][$i] > 0) ? "red" : "blue";

@@ -16,14 +16,14 @@ sscanf($y_day, "%d.%d.%d", $ts_yY, $ts_yM, $ts_yD);
 
 $vn = array (
     "hm" => array(),
-    "dl" => array(),
-    "dl_r" => array(),
-    "dm" => array(),
-    "dm_r" => array(),
-    "d3" => array(),
-    "d3_r" => array(),
-    "bs" => array(),
-    "bs_r" => array(),
+    "c1" => array(),
+    "c1_r" => array(),
+    "c2" => array(),
+    "c2_r" => array(),
+    "c3" => array(),
+    "c3_r" => array(),
+    "c4" => array(),
+    "c4_r" => array(),
 );
 
 $m_start = $ts_m - ($ts_m % 10);
@@ -60,31 +60,31 @@ $ok = FALSE;
 $file_name = "data/sus_avg.txt";
 if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
 {
-  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
+  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_c1, $t_c1_r, $t_c2, $t_c2_r, $t_c3, $t_c3_r, $t_c4, $t_c4_r, $sus_dt);
   if(strpos($sus_dt, $hm_start) === 0)
   {
     // ok
     $ok = TRUE;
-    $vn["dl"][0] = $t_dl;
-    $vn["dl_r"][0] = $t_dl_r;
-    $vn["dm"][0] = $t_dm;
-    $vn["dm_r"][0] = $t_dm_r;
-    $vn["d3"][0] = $t_d3;
-    $vn["d3_r"][0] = $t_d3_r;
-    $vn["bs"][0] = $t_bs;
-    $vn["bs_r"][0] = $t_bs_r;
+    $vn["c1"][0] = $t_c1;
+    $vn["c1_r"][0] = $t_c1_r;
+    $vn["c2"][0] = $t_c2;
+    $vn["c2_r"][0] = $t_c2_r;
+    $vn["c3"][0] = $t_c3;
+    $vn["c3_r"][0] = $t_c3_r;
+    $vn["c4"][0] = $t_c4;
+    $vn["c4_r"][0] = $t_c4_r;
   }
 }
 if($ok === FALSE)
 {
-    $vn["dl"][0] = 0;
-    $vn["dl_r"][0] = 0;
-    $vn["dm"][0] = 0;
-    $vn["dm_r"][0] = 0;
-    $vn["d3"][0] = 0;
-    $vn["d3_r"][0] = 0;
-    $vn["bs"][0] = 0;
-    $vn["bs_r"][0] = 0;
+    $vn["c1"][0] = 0;
+    $vn["c1_r"][0] = 0;
+    $vn["c2"][0] = 0;
+    $vn["c2_r"][0] = 0;
+    $vn["c3"][0] = 0;
+    $vn["c3_r"][0] = 0;
+    $vn["c4"][0] = 0;
+    $vn["c4_r"][0] = 0;
 }
 
 $lines = array();
@@ -140,26 +140,26 @@ for($i = 1; $i <= $SIZE; ++$i)
   if(array_key_exists($key, $lines))
   {
     $line = $lines[$key];
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
-    $vn["dl"][$i] = $t_dl;
-    $vn["dl_r"][$i] = $t_dl_r;
-    $vn["dm"][$i] = $t_dm;
-    $vn["dm_r"][$i] = $t_dm_r;
-    $vn["d3"][$i] = $t_d3;
-    $vn["d3_r"][$i] = $t_d3_r;
-    $vn["bs"][$i] = $t_bs;
-    $vn["bs_r"][$i] = $t_bs_r;
+    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_c1, $t_c1_r, $t_c2, $t_c2_r, $t_c3, $t_c3_r, $t_c4, $t_c4_r, $sus_dt);
+    $vn["c1"][$i] = $t_c1;
+    $vn["c1_r"][$i] = $t_c1_r;
+    $vn["c2"][$i] = $t_c2;
+    $vn["c2_r"][$i] = $t_c2_r;
+    $vn["c3"][$i] = $t_c3;
+    $vn["c3_r"][$i] = $t_c3_r;
+    $vn["c4"][$i] = $t_c4;
+    $vn["c4_r"][$i] = $t_c4_r;
   }
   else
   {
-    $vn["dl"][$i] = 0;
-    $vn["dl_r"][$i] = 0;
-    $vn["dm"][$i] = 0;
-    $vn["dm_r"][$i] = 0;
-    $vn["d3"][$i] = 0;
-    $vn["d3_r"][$i] = 0;
-    $vn["bs"][$i] = 0;
-    $vn["bs_r"][$i] = 0;
+    $vn["c1"][$i] = 0;
+    $vn["c1_r"][$i] = 0;
+    $vn["c2"][$i] = 0;
+    $vn["c2_r"][$i] = 0;
+    $vn["c3"][$i] = 0;
+    $vn["c3_r"][$i] = 0;
+    $vn["c4"][$i] = 0;
+    $vn["c4_r"][$i] = 0;
   }
 }
 
@@ -170,40 +170,40 @@ else if(is_file("/opt/share/fonts/bitstream-vera/VeraSe.ttf"))
   $fontfile = "/opt/share/fonts/bitstream-vera/VeraSe.ttf";
 
 $max_all = 0; $min_all = 0;
-$max_dl = 0; $min_dl = 0;
-$max_dm = 0; $min_dm = 0;
-$max_d3 = 0; $min_d3 = 0;
-$max_bs = 0; $min_bs = 0;
+$max_c1 = 0; $min_c1 = 0;
+$max_c2 = 0; $min_c2 = 0;
+$max_c3 = 0; $min_c3 = 0;
+$max_c4 = 0; $min_c4 = 0;
 
 for($i = 0; $i <= $SIZE; ++$i)
 {
-  if(($dl = $vn["dl"][$i]) > 0)
+  if(($c1 = $vn["c1"][$i]) > 0)
   {
-    if($max_dl < $dl) $max_dl = $dl;
-    if($min_dl === 0 || $min_dl > $dl) $min_dl = $dl;
-    if($max_all < $max_dl) $max_all = $max_dl;
-    if($min_all === 0 || $min_all > $min_dl) $min_all = $min_dl;
+    if($max_c1 < $c1) $max_c1 = $c1;
+    if($min_c1 === 0 || $min_c1 > $c1) $min_c1 = $c1;
+    if($max_all < $max_c1) $max_all = $max_c1;
+    if($min_all === 0 || $min_all > $min_c1) $min_all = $min_c1;
   }
-  if(($dm = $vn["dm"][$i]) > 0)
+  if(($c2 = $vn["c2"][$i]) > 0)
   {
-    if($max_dm < $dm) $max_dm = $dm;
-    if($min_dm === 0 || $min_dm > $dm) $min_dm = $dm;
-    if($max_all < $max_dm) $max_all = $max_dm;
-    if($min_all === 0 || $min_all > $min_dm) $min_all = $min_dm;
+    if($max_c2 < $c2) $max_c2 = $c2;
+    if($min_c2 === 0 || $min_c2 > $c2) $min_c2 = $c2;
+    if($max_all < $max_c2) $max_all = $max_c2;
+    if($min_all === 0 || $min_all > $min_c2) $min_all = $min_c2;
   }
-  if(($d3 = $vn["d3"][$i]) > 0)
+  if(($c3 = $vn["c3"][$i]) > 0)
   {
-    if($max_d3 < $d3) $max_d3 = $d3;
-    if($min_d3 === 0 || $min_d3 > $d3) $min_d3 = $d3;
-    if($max_all < $max_d3) $max_all = $max_d3;
-    if($min_all === 0 || $min_all > $min_d3) $min_all = $min_d3;
+    if($max_c3 < $c3) $max_c3 = $c3;
+    if($min_c3 === 0 || $min_c3 > $c3) $min_c3 = $c3;
+    if($max_all < $max_c3) $max_all = $max_c3;
+    if($min_all === 0 || $min_all > $min_c3) $min_all = $min_c3;
   }
-  if(($bs = $vn["bs"][$i]) > 0)
+  if(($c4 = $vn["c4"][$i]) > 0)
   {
-    if($max_bs < $bs) $max_bs = $bs;
-    if($min_bs === 0 || $min_bs > $bs) $min_bs = $bs;
-    if($max_all < $max_bs) $max_all = $max_bs;
-    if($min_all === 0 || $min_all > $min_bs) $min_all = $min_bs;
+    if($max_c4 < $c4) $max_c4 = $c4;
+    if($min_c4 === 0 || $min_c4 > $c4) $min_c4 = $c4;
+    if($max_all < $max_c4) $max_all = $max_c4;
+    if($min_all === 0 || $min_all > $min_c4) $min_all = $min_c4;
   }
 }
 
@@ -229,12 +229,12 @@ $time_w = $time_box[2] - $time_box[0];
 $time_h = $time_box[1] - $time_box[7];
 // echo "time_w=".$time_w.", time_h=".$time_h."\n";
 //// Title text width & height
-$dl_str = "Dormitor Luca"; $dl_box = imagettfbbox($fsz, 0, $fontfile, $dl_str); $dl_w = $dl_box[2] - $dl_box[0]; $dl_h = $dl_box[1] - $dl_box[7];
-$dm_str = "Dormitor matrimonial"; $dm_box = imagettfbbox($fsz, 0, $fontfile, $dm_str); $dm_w = $dm_box[2] - $dm_box[0]; $dm_h = $dm_box[1] - $dm_box[7];
-$d3_str = "Dormitor oaspeti"; $d3_box = imagettfbbox($fsz, 0, $fontfile, $d3_str); $d3_w = $d3_box[2] - $d3_box[0]; $d3_h = $d3_box[1] - $d3_box[7];
-$bs_str = "Baie sus"; $bs_box = imagettfbbox($fsz, 0, $fontfile, $bs_str); $bs_w = $bs_box[2] - $bs_box[0]; $bs_h = $bs_box[1] - $bs_box[7];
-$title_w = $dl_w + $dm_w + $d3_w + $bs_w;
-$title_h = $d3_h;
+$c1_str = "Dormitor Luca"; $c1_box = imagettfbbox($fsz, 0, $fontfile, $c1_str); $c1_w = $c1_box[2] - $c1_box[0]; $c1_h = $c1_box[1] - $c1_box[7];
+$c2_str = "Dormitor matrimonial"; $c2_box = imagettfbbox($fsz, 0, $fontfile, $c2_str); $c2_w = $c2_box[2] - $c2_box[0]; $c2_h = $c2_box[1] - $c2_box[7];
+$c3_str = "Dormitor oaspeti"; $c3_box = imagettfbbox($fsz, 0, $fontfile, $c3_str); $c3_w = $c3_box[2] - $c3_box[0]; $c3_h = $c3_box[1] - $c3_box[7];
+$c4_str = "Baie sus"; $c4_box = imagettfbbox($fsz, 0, $fontfile, $c4_str); $c4_w = $c4_box[2] - $c4_box[0]; $c4_h = $c4_box[1] - $c4_box[7];
+$title_w = $c1_w + $c2_w + $c3_w + $c4_w;
+$title_h = $c3_h;
 
 //// lelft and right gaps
 $l_gap = 2 * $rad + $temp_w;
@@ -260,119 +260,119 @@ $yellow_color = imagecolorallocate($image, 255, 255, 0);
 $green_color = imagecolorallocate($image, 0, 255, 0);
 $orange_color = imagecolorallocate($image, 255, 128, 0);
 
-$dl_color = $green_color;
-$dm_color = $orange_color;
-$d3_color = $blue_color;
-$bs_color = $red_color;
+$c1_color = $green_color;
+$c2_color = $orange_color;
+$c3_color = $blue_color;
+$c4_color = $red_color;
 
 //// title
 $title_w += 4 * 10 * $w_c + 7 * $rad;
 $title_x = $im_w / 2 - $title_w / 2;
 $title_y = $rad + $title_h;
 $hth = intval($title_h / 2);
-// dl
-imagettftext($image, $fsz, 0, $title_x, $title_y, $dl_color, $fontfile, $dl_str);
-$title_x += $rad + $dl_w; $title_y -= $hth;
+// c1
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c1_color, $fontfile, $c1_str);
+$title_x += $rad + $c1_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $dl_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c1_color);
 }
-// dm
+// c2
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $dm_color, $fontfile, $dm_str);
-$title_x += $rad + $dm_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c2_color, $fontfile, $c2_str);
+$title_x += $rad + $c2_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $dm_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c2_color);
 }
-// d3
+// c3
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $d3_color, $fontfile, $d3_str);
-$title_x += $rad + $d3_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c3_color, $fontfile, $c3_str);
+$title_x += $rad + $c3_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $d3_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c3_color);
 }
-// bs
+// c4
 $title_x += $rad + 10 * $w_c; $title_y += $hth;
-imagettftext($image, $fsz, 0, $title_x, $title_y, $bs_color, $fontfile, $bs_str);
-$title_x += $rad + $bs_w; $title_y -= $hth;
+imagettftext($image, $fsz, 0, $title_x, $title_y, $c4_color, $fontfile, $c4_str);
+$title_x += $rad + $c4_w; $title_y -= $hth;
 for($i = 0 ; $i < 5 ; ++$i)
 {    
-  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $bs_color);
+  imageline($image, $title_x, $title_y - 2 + $i, $title_x + 10 * $w_c, $title_y - 2 + $i, $c4_color);
 }
 
 // Etaj
-$dl_x_prev = 0; $dl_y_prev = 0; $dl_r_prev = 0;
-$dm_x_prev = 0; $dm_y_prev = 0; $dm_r_prev = 0;
-$d3_x_prev = 0; $d3_y_prev = 0; $d3_r_prev = 0;
-$bs_x_prev = 0; $bs_y_prev = 0; $bs_r_prev = 0;
+$c1_x_prev = 0; $c1_y_prev = 0; $c1_r_prev = 0;
+$c2_x_prev = 0; $c2_y_prev = 0; $c2_r_prev = 0;
+$c3_x_prev = 0; $c3_y_prev = 0; $c3_r_prev = 0;
+$c4_x_prev = 0; $c4_y_prev = 0; $c4_r_prev = 0;
 
 for($i = $SIZE; $i >= 0; --$i)
 {
   // Dormitor Luca
-  $dl = $vn["dl"][$i]; $dl_r = $vn["dl_r"][$i];
+  $c1 = $vn["c1"][$i]; $c1_r = $vn["c1_r"][$i];
 
-  $dl_x = $l_gap + 2 * $w_c * ($SIZE - $i); $dl_y = $im_h - (($dl - $min_img) * $h_c + $b_gap);
-  if($dl_x_prev === 0 && $dl_y_prev === 0) { $dl_x_prev = $dl_x; $dl_y_prev = $dl_y; $dl_r_prev = $dl_r; }
+  $c1_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
+  if($c1_x_prev === 0 && $c1_y_prev === 0) { $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r; }
 
-  imageline($image, $dl_x_prev, $dl_y_prev - 2, $dl_x, $dl_y - 2, $dl_color);
-  imageline($image, $dl_x_prev, $dl_y_prev + 2, $dl_x, $dl_y + 2, $dl_color);
-  if($dl_r_prev !== 0)
+  imageline($image, $c1_x_prev, $c1_y_prev - 2, $c1_x, $c1_y - 2, $c1_color);
+  imageline($image, $c1_x_prev, $c1_y_prev + 2, $c1_x, $c1_y + 2, $c1_color);
+  if($c1_r_prev !== 0)
   {
-    imageline($image, $dl_x_prev, $dl_y_prev - 1, $dl_x, $dl_y - 1, $dl_color);
-    imageline($image, $dl_x_prev, $dl_y_prev, $dl_x, $dl_y, $dl_color);
-    imageline($image, $dl_x_prev, $dl_y_prev + 1, $dl_x, $dl_y + 1, $dl_color);
+    imageline($image, $c1_x_prev, $c1_y_prev - 1, $c1_x, $c1_y - 1, $c1_color);
+    imageline($image, $c1_x_prev, $c1_y_prev, $c1_x, $c1_y, $c1_color);
+    imageline($image, $c1_x_prev, $c1_y_prev + 1, $c1_x, $c1_y + 1, $c1_color);
   }
-  $dl_x_prev = $dl_x; $dl_y_prev = $dl_y; $dl_r_prev = $dl_r;
+  $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r;
 
   // Dormitor matrimonial
-  $dm = $vn["dm"][$i]; $dm_r = $vn["dm_r"][$i];
+  $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
 
-  $dm_x = $l_gap + 2 * $w_c * ($SIZE - $i); $dm_y = $im_h - (($dm - $min_img) * $h_c + $b_gap);
-  if($dm_x_prev === 0 && $dm_y_prev === 0) { $dm_x_prev = $dm_x; $dm_y_prev = $dm_y; $dm_r_prev = $dm_r; }
+  $c2_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
+  if($c2_x_prev === 0 && $c2_y_prev === 0) { $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r; }
 
-  imageline($image, $dm_x_prev, $dm_y_prev - 2, $dm_x, $dm_y - 2, $dm_color);
-  imageline($image, $dm_x_prev, $dm_y_prev + 2, $dm_x, $dm_y + 2, $dm_color);
-  if($dm_r_prev !== 0)
+  imageline($image, $c2_x_prev, $c2_y_prev - 2, $c2_x, $c2_y - 2, $c2_color);
+  imageline($image, $c2_x_prev, $c2_y_prev + 2, $c2_x, $c2_y + 2, $c2_color);
+  if($c2_r_prev !== 0)
   {
-    imageline($image, $dm_x_prev, $dm_y_prev - 1, $dm_x, $dm_y - 1, $dm_color);
-    imageline($image, $dm_x_prev, $dm_y_prev, $dm_x, $dm_y, $dm_color);
-    imageline($image, $dm_x_prev, $dm_y_prev + 1, $dm_x, $dm_y + 1, $dm_color);
+    imageline($image, $c2_x_prev, $c2_y_prev - 1, $c2_x, $c2_y - 1, $c2_color);
+    imageline($image, $c2_x_prev, $c2_y_prev, $c2_x, $c2_y, $c2_color);
+    imageline($image, $c2_x_prev, $c2_y_prev + 1, $c2_x, $c2_y + 1, $c2_color);
   }
-  $dm_x_prev = $dm_x; $dm_y_prev = $dm_y; $dm_r_prev = $dm_r;
+  $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r;
 
   // Dormitor oaspeti
-  $d3 = $vn["d3"][$i]; $d3_r = $vn["d3_r"][$i];
+  $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
 
-  $d3_x = $l_gap + 2 * $w_c * ($SIZE - $i); $d3_y = $im_h - (($d3 - $min_img) * $h_c + $b_gap);
-  if($d3_x_prev === 0 && $d3_y_prev === 0) { $d3_x_prev = $d3_x; $d3_y_prev = $d3_y; $d3_r_prev = $d3_r; }
+  $c3_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
+  if($c3_x_prev === 0 && $c3_y_prev === 0) { $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r; }
 
-  imageline($image, $d3_x_prev, $d3_y_prev - 2, $d3_x, $d3_y - 2, $d3_color);
-  imageline($image, $d3_x_prev, $d3_y_prev + 2, $d3_x, $d3_y + 2, $d3_color);
-  if($d3_r_prev !== 0)
+  imageline($image, $c3_x_prev, $c3_y_prev - 2, $c3_x, $c3_y - 2, $c3_color);
+  imageline($image, $c3_x_prev, $c3_y_prev + 2, $c3_x, $c3_y + 2, $c3_color);
+  if($c3_r_prev !== 0)
   {
-    imageline($image, $d3_x_prev, $d3_y_prev - 1, $d3_x, $d3_y - 1, $d3_color);
-    imageline($image, $d3_x_prev, $d3_y_prev, $d3_x, $d3_y, $d3_color);
-    imageline($image, $d3_x_prev, $d3_y_prev + 1, $d3_x, $d3_y + 1, $d3_color);
+    imageline($image, $c3_x_prev, $c3_y_prev - 1, $c3_x, $c3_y - 1, $c3_color);
+    imageline($image, $c3_x_prev, $c3_y_prev, $c3_x, $c3_y, $c3_color);
+    imageline($image, $c3_x_prev, $c3_y_prev + 1, $c3_x, $c3_y + 1, $c3_color);
   }
-  $d3_x_prev = $d3_x; $d3_y_prev = $d3_y; $d3_r_prev = $d3_r;
+  $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r;
 
   // Baie sus
-  $bs = $vn["bs"][$i]; $bs_r = $vn["bs_r"][$i];
+  $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
 
-  $bs_x = $l_gap + 2 * $w_c * ($SIZE - $i); $bs_y = $im_h - (($bs - $min_img) * $h_c + $b_gap);
-  if($bs_x_prev === 0 && $bs_y_prev === 0) { $bs_x_prev = $bs_x; $bs_y_prev = $bs_y; $bs_r_prev = $bs_r; }
+  $c4_x = $l_gap + 2 * $w_c * ($SIZE - $i); $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
+  if($c4_x_prev === 0 && $c4_y_prev === 0) { $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r; }
 
-  imageline($image, $bs_x_prev, $bs_y_prev - 2, $bs_x, $bs_y - 2, $bs_color);
-  imageline($image, $bs_x_prev, $bs_y_prev + 2, $bs_x, $bs_y + 2, $bs_color);
-  if($bs_r_prev !== 0)
+  imageline($image, $c4_x_prev, $c4_y_prev - 2, $c4_x, $c4_y - 2, $c4_color);
+  imageline($image, $c4_x_prev, $c4_y_prev + 2, $c4_x, $c4_y + 2, $c4_color);
+  if($c4_r_prev !== 0)
   {
-    imageline($image, $bs_x_prev, $bs_y_prev - 1, $bs_x, $bs_y - 1, $bs_color);
-    imageline($image, $bs_x_prev, $bs_y_prev, $bs_x, $bs_y, $bs_color);
-    imageline($image, $bs_x_prev, $bs_y_prev + 1, $bs_x, $bs_y + 1, $bs_color);
+    imageline($image, $c4_x_prev, $c4_y_prev - 1, $c4_x, $c4_y - 1, $c4_color);
+    imageline($image, $c4_x_prev, $c4_y_prev, $c4_x, $c4_y, $c4_color);
+    imageline($image, $c4_x_prev, $c4_y_prev + 1, $c4_x, $c4_y + 1, $c4_color);
   }
-  $bs_x_prev = $bs_x; $bs_y_prev = $bs_y; $bs_r_prev = $bs_r;
+  $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r;
 
 }
 //// time
