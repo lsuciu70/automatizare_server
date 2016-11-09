@@ -595,7 +595,7 @@ echo "    <th align='center'><font color='" . $c2_color_str . "'>".$c2_str."</fo
 echo "    <th align='center'><font color='" . $c3_color_str . "'>".$c3_str."</font></th>\n";
 echo "    <th align='center'><font color='" . $c4_color_str . "'>".$c4_str."</font></th>\n";
 echo "   </tr>\n";
-for($i = $SIZE - 1; $i >= 0; --$i)
+for($i = 0; $i < $SIZE; ++$i)
 {
   $c1_r = $vn["c1_r"][$i] > 0;
   $c2_r = $vn["c2_r"][$i] > 0;
