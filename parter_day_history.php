@@ -380,99 +380,6 @@ $c2_color = $orange_color;
 $c3_color = $blue_color;
 $c4_color = $red_color;
 
-$c1_x_prev = 0; $c1_y_prev = 0; $c1_r_prev = 0;
-$c2_x_prev = 0; $c2_y_prev = 0; $c2_r_prev = 0;
-$c3_x_prev = 0; $c3_y_prev = 0; $c3_r_prev = 0;
-$c4_x_prev = 0; $c4_y_prev = 0; $c4_r_prev = 0;
-
-for($i = $SIZE - 1; $i >= 0; --$i)
-{
-  // Dormitor Luca / Bucatarie
-  $c1 = $vn["c1"][$i]; $c1_r = $vn["c1_r"][$i];
-if($c1 !== 0)
-{
-  $c1_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1); $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
-  if($c1_x_prev === 0 && $c1_y_prev === 0) { $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r; }
-
-  imageline($image, $c1_x_prev, $c1_y_prev - 2, $c1_x, $c1_y - 2, $c1_color);
-  imageline($image, $c1_x_prev, $c1_y_prev + 2, $c1_x, $c1_y + 2, $c1_color);
-  if($c1_r_prev !== 0)
-  {
-    imageline($image, $c1_x_prev, $c1_y_prev - 1, $c1_x, $c1_y - 1, $c1_color);
-    imageline($image, $c1_x_prev, $c1_y_prev, $c1_x, $c1_y, $c1_color);
-    imageline($image, $c1_x_prev, $c1_y_prev + 1, $c1_x, $c1_y + 1, $c1_color);
-  }
-  $c1_x_prev = $c1_x; $c1_y_prev = $c1_y; $c1_r_prev = $c1_r;
-}
-  // Dormitor matrimonial / Living
-  $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
-if($c2 !== 0)
-{
-  $c2_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1); $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
-  if($c2_x_prev === 0 && $c2_y_prev === 0) { $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r; }
-
-  imageline($image, $c2_x_prev, $c2_y_prev - 2, $c2_x, $c2_y - 2, $c2_color);
-  imageline($image, $c2_x_prev, $c2_y_prev + 2, $c2_x, $c2_y + 2, $c2_color);
-  if($c2_r_prev !== 0)
-  {
-    imageline($image, $c2_x_prev, $c2_y_prev - 1, $c2_x, $c2_y - 1, $c2_color);
-    imageline($image, $c2_x_prev, $c2_y_prev, $c2_x, $c2_y, $c2_color);
-    imageline($image, $c2_x_prev, $c2_y_prev + 1, $c2_x, $c2_y + 1, $c2_color);
-  }
-  $c2_x_prev = $c2_x; $c2_y_prev = $c2_y; $c2_r_prev = $c2_r;
-}
-  // Dormitor oaspeti / Birou
-  $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
-if($c3 !== 0)
-{
-  $c3_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1); $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
-  if($c3_x_prev === 0 && $c3_y_prev === 0) { $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r; }
-
-  imageline($image, $c3_x_prev, $c3_y_prev - 2, $c3_x, $c3_y - 2, $c3_color);
-  imageline($image, $c3_x_prev, $c3_y_prev + 2, $c3_x, $c3_y + 2, $c3_color);
-  if($c3_r_prev !== 0)
-  {
-    imageline($image, $c3_x_prev, $c3_y_prev - 1, $c3_x, $c3_y - 1, $c3_color);
-    imageline($image, $c3_x_prev, $c3_y_prev, $c3_x, $c3_y, $c3_color);
-    imageline($image, $c3_x_prev, $c3_y_prev + 1, $c3_x, $c3_y + 1, $c3_color);
-  }
-  $c3_x_prev = $c3_x; $c3_y_prev = $c3_y; $c3_r_prev = $c3_r;
-}
-  // Baie 
-  $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
-if($c4 !== 0)
-{
-  $c4_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1); $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
-  if($c4_x_prev === 0 && $c4_y_prev === 0) { $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r; }
-
-  imageline($image, $c4_x_prev, $c4_y_prev - 2, $c4_x, $c4_y - 2, $c4_color);
-  imageline($image, $c4_x_prev, $c4_y_prev + 2, $c4_x, $c4_y + 2, $c4_color);
-  if($c4_r_prev !== 0)
-  {
-    imageline($image, $c4_x_prev, $c4_y_prev - 1, $c4_x, $c4_y - 1, $c4_color);
-    imageline($image, $c4_x_prev, $c4_y_prev, $c4_x, $c4_y, $c4_color);
-    imageline($image, $c4_x_prev, $c4_y_prev + 1, $c4_x, $c4_y + 1, $c4_color);
-  }
-  $c4_x_prev = $c4_x; $c4_y_prev = $c4_y; $c4_r_prev = $c4_r;
-}
-}
-//// time
-$hm_y = $im_h - $b_gap + $rad;
-$hm_x = 0;
-for($i = $SIZE - 1; $i >= 0; --$i)
-{
-  if($i === $SIZE - 1 || $i === 0 || ($i % $MEAS_PER_HOUR) === 0)
-  {
-    $hm = $vn["hm"][$i];
-    $hm_x_new = $l_gap + 2 * $w_c * ($SIZE - $i - 1);
-    if($hm_x > 0 && $hm_x_new - $hm_x < $time_w + $w_c)
-      continue;
-    $hm_x = $hm_x_new;
-    imagettftext($image, $fsz, 0, ($hm_x - $time_w / 2), $im_h - $rad, $black_color, $fontfile, $hm);
-    imageline($image, $hm_x, $hm_y, $hm_x, $t_gap - $rad, $black_color);
-  }
-}
-
 //// max temperature
 $p_zec = $max_all % 100; $p_int = ($max_all - $p_zec) / 100;
 $max_str = sprintf("%2d.%02d", $p_int, $p_zec);
@@ -504,6 +411,91 @@ $min_x = $l_gap - $rad;
 $min_y = $im_h - $b_gap;
 imagettftext($image, $fsz, 0, $rad, ($min_y + ($fsz / 2)), $black_color, $fontfile, $min_str);
 imageline($image, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
+
+$imgmap = "  <map name='historymap'>\n";
+
+for($i = $SIZE - 1; $i >= 0; --$i)
+{
+  $c_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1);
+  $hm = $vn["hm"][$i];
+  
+  
+  $left_top_x = $c_x - ($rad + $w_c) / 2;
+  $left_top_y = $max_y;
+  $right_bott_x = $c_x + ($rad + $w_c) / 2;
+  $right_bott_y = $min_y;
+  $imgmap .= "   <area shape='rect' coords='".$left_top_x.", ".$left_top_y.", ".$right_bott_x.", ".$right_bott_y."' alt='Sun' title='".$hm;
+  // Dormitor Luca / Bucatarie
+  $c1 = $vn["c1"][$i]; $c1_r = $vn["c1_r"][$i];
+if($c1 !== 0)
+{
+  $p_zec = $c1 % 100; $p_int = ($c1 - $p_zec) / 100;
+  $c1_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c1_temp_str." - ".$c1_str;
+  $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
+  if($c1_r !== 0)
+    imagefilledellipse($image, $c_x, $c1_y, $rad, $rad, $c1_color);
+  else
+    imageellipse($image, $c_x, $c1_y, $rad, $rad, $c1_color);
+}
+  // Dormitor matrimonial / Living
+  $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
+if($c2 !== 0)
+{
+  $p_zec = $c2 % 100; $p_int = ($c2 - $p_zec) / 100;
+  $c2_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c2_temp_str." - ".$c2_str;
+  $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
+  if($c2_r !== 0)
+    imagefilledellipse($image, $c_x, $c2_y, $rad, $rad, $c2_color);
+  else
+    imageellipse($image, $c_x, $c2_y, $rad, $rad, $c2_color);
+}
+  // Dormitor oaspeti / Birou
+  $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
+if($c3 !== 0)
+{
+  $p_zec = $c3 % 100; $p_int = ($c3 - $p_zec) / 100;
+  $c3_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c3_temp_str." - ".$c3_str;
+  $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
+  if($c3_r !== 0)
+    imagefilledellipse($image, $c_x, $c3_y, $rad, $rad, $c3_color);
+  else
+    imageellipse($image, $c_x, $c3_y, $rad, $rad, $c3_color);
+}
+  // Baie 
+  $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
+if($c4 !== 0)
+{
+  $p_zec = $c4 % 100; $p_int = ($c4 - $p_zec) / 100;
+  $c4_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c4_temp_str." - ".$c4_str;
+  $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
+  if($c4_r !== 0)
+    imagefilledellipse($image, $c_x, $c4_y, $rad, $rad, $c4_color);
+  else
+    imageellipse($image, $c_x, $c4_y, $rad, $rad, $c4_color);
+}
+$imgmap .= "' href=''>\n";
+}
+$imgmap .= "  </map>\n";
+//// time name='historymap'
+$hm_y = $im_h - $b_gap + $rad;
+$hm_x = 0;
+for($i = $SIZE - 1; $i >= 0; --$i)
+{
+  if($i === $SIZE - 1 || $i === 0 || ($i % $MEAS_PER_HOUR) === 0)
+  {
+    $hm = $vn["hm"][$i];
+    $hm_x_new = $l_gap + 2 * $w_c * ($SIZE - $i - 1);
+    if($hm_x > 0 && $hm_x_new - $hm_x < $time_w + $w_c)
+      continue;
+    $hm_x = $hm_x_new;
+    imagettftext($image, $fsz, 0, ($hm_x - $time_w / 2), $im_h - $rad, $black_color, $fontfile, $hm);
+    imageline($image, $hm_x, $hm_y, $hm_x, $t_gap - $rad, $black_color);
+  }
+}
 
 //// temperatures in between
 $bw_y = $min_y - $max_y;
@@ -566,7 +558,11 @@ echo " <body>\n";
 
 echo "  <table style='border-style:hidden;'>\n";
 echo "   <tr><th align='center' style='border-style:hidden;'>".$date_time."</th></tr>\n";
-echo "   <tr><td align='center' style='border-style:hidden;'><img src='".$image_file_name."'></td></tr>\n";
+echo "   <tr>\n";
+echo "    <td align='center' style='border-style:hidden;'>\n";
+echo "     <img src='".$image_file_name."' usemap='#historymap'>\n";
+echo "    </td>\n";
+echo "   </tr>\n";
 echo "  </table>\n";
 echo "  <table>\n";
 echo "   <tr>\n";
@@ -627,6 +623,7 @@ for($i = 0; $i < $SIZE; ++$i)
   echo "   </tr>\n";
 }
 echo "  </table>\n";
+echo $imgmap;
 
 // show logs
 if($log_count > 0)
