@@ -7,6 +7,7 @@ header("Refresh: 10; URL=$url1");
 $now_ts = strftime("%d-%m-%Y %H:%M:%S");
 $ts_full = strftime("%Y.%m.%d_%H:%M:%S");
 sscanf($ts_full, "%d.%d.%d_%d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
+$t_day = sprintf("%d.%d.%d", $ts_Y, $ts_M, $ts_D);
 
 // read last temperatures
 $jos_temp_file_name = "data/jos_temp.txt";
@@ -136,6 +137,7 @@ for ($i = 0 ; $i < 8 ; $i++)
 // logs
 $log = array();
 $log_count = 0;
+$log_file_name = "data/log_" . $t_day . ".txt";
 $is_log_file = is_file($log_file_name);
 if($is_log_file)
 {

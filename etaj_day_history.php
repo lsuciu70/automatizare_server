@@ -385,7 +385,7 @@ $t_gap = 2 * $rad;
 
 //// image width
 $im_w = (2 * $SIZE - 1) * $w_c + $l_gap + $r_gap;
-$im_h = ($max_img - $min_img) * $h_c + $b_gap + $t_gap;
+$im_h = intval(($max_img - $min_img) * $h_c) + $b_gap + $t_gap;
 
 //// max image temperature
 $p_zec = $max_img % 100; $p_int = ($max_img - $p_zec) / 100;
@@ -481,14 +481,14 @@ $c4_color = $red_color;
 $p_zec = $max_all % 100; $p_int = ($max_all - $p_zec) / 100;
 $max_str = sprintf("%2d.%02d", $p_int, $p_zec);
 $max_x = $l_gap - $rad;
-$max_y = $im_h - (($max_all - $min_img) * $h_c + $b_gap);
+$max_y = $im_h - intval((($max_all - $min_img) * $h_c) + $b_gap);
 imagettftext($image, $fsz, 0, $im_w - $r_gap + $rad, ($max_y + ($fsz / 2)), $black_color, $fontfile, $max_str);
 imageline($image, $max_x, $max_y, ($im_w - $r_gap), $max_y, $black_color);
 //// min temperature
 $p_zec = $min_all % 100; $p_int = ($min_all - $p_zec) / 100;
 $min_str = sprintf("%2d.%02d", $p_int, $p_zec);
 $min_x = $l_gap - $rad;
-$min_y = $im_h - (($min_all - $min_img) * $h_c + $b_gap);
+$min_y = $im_h - intval((($min_all - $min_img) * $h_c) + $b_gap);
 imagettftext($image, $fsz, 0, $im_w - $r_gap + $rad, ($min_y + ($fsz / 2)), $black_color, $fontfile, $min_str);
 imageline($image, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
 
@@ -510,7 +510,7 @@ for($i = $SIZE - 1; $i >= 0; --$i)
   $c1_r = $vn["c1_r"][$i];
 if($c1 !== 0)
 {
-  $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
+  $c1_y = $im_h - intval((($c1 - $min_img) * $h_c) + $b_gap);
   if($c1_r !== 0)
     imagefilledellipse($image, $c_x, $c1_y, $rad, $rad, $c1_color);
   else
@@ -520,7 +520,7 @@ if($c1 !== 0)
   $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
 if($c2 !== 0)
 {
-  $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
+  $c2_y = $im_h - intval((($c2 - $min_img) * $h_c) + $b_gap);
   if($c2_r !== 0)
     imagefilledellipse($image, $c_x, $c2_y, $rad, $rad, $c2_color);
   else
@@ -530,7 +530,7 @@ if($c2 !== 0)
   $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
 if($c3 !== 0)
 {
-  $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
+  $c3_y = $im_h - intval((($c3 - $min_img) * $h_c) + $b_gap);
   if($c3_r !== 0)
     imagefilledellipse($image, $c_x, $c3_y, $rad, $rad, $c3_color);
   else
@@ -540,7 +540,7 @@ if($c3 !== 0)
   $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
 if($c4 !== 0)
 {
-  $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
+  $c4_y = $im_h - intval((($c4 - $min_img) * $h_c) + $b_gap);
   if($c4_r !== 0)
     imagefilledellipse($image, $c_x, $c4_y, $rad, $rad, $c4_color);
   else
@@ -574,7 +574,7 @@ $inter = $min_img;
 $inter_x = $l_gap - $rad;
 while(($inter += $temp_scale) < $max_img)
 {
-  $inter_y = $im_h - (($inter - $min_img) * $h_c + $b_gap);
+  $inter_y = $im_h - intval((($inter - $min_img) * $h_c) + $b_gap);
   if(abs($inter_y - $max_img_y) <= $temp_h)
   {
     // skip, too close to max_img
@@ -625,6 +625,8 @@ echo "   td { padding:5px; border-style:solid; border-width:thin; width:10em; }\
 echo "  </style>\n";
 echo " </head>\n";
 echo " <body>\n";
+
+echo $imgmap;
 
 echo "  <table style='border-style:hidden;'>\n";
 echo "   <tr><th align='center' style='border-style:hidden;'>".$date_time."</th></tr>\n";
@@ -693,7 +695,6 @@ for($i = 0; $i < $SIZE; ++$i)
   echo "   </tr>\n";
 }
 echo "  </table>\n";
-echo $imgmap;
 
 // show logs
 if($log_count > 0)
