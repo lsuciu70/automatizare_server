@@ -133,6 +133,20 @@ for ($i = 0 ; $i < 8 ; $i++)
   }
 }
 
+// logs
+$log = array();
+$log_count = 0;
+$is_log_file = is_file($log_file_name);
+if($is_log_file)
+{
+  $log_file = fopen($log_file_name, "r");
+  while (($line = fgets($log_file)) !== FALSE)
+  {
+    $log[$log_count] = $line;
+    ++$log_count;
+  }
+}
+
 echo "<!DOCTYPE html>\n";
 echo "<html>\n";
 echo " <head>\n";
@@ -161,10 +175,11 @@ echo "   </tr>\n";
 
 if($is_sus)
 {
+  $t_loc = "etaj";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th>Etaj</th>\n";
-  echo "    <td align='left' colspan='4'><form action='etaj_day_history.php' method='get'><input type='submit' value='Istoric'></form></td>\n";
+  echo "    <td align='left' colspan='4'><form action='".$t_loc."_day_history.php' method='post'><input type='submit' value='Istoric'></form></td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
@@ -206,10 +221,11 @@ if($is_sus)
 }
 if($is_jos)
 {
+  $t_loc = "parter";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th>Parter</th>\n";
-  echo "    <td align='left' colspan='4'><form action='parter_day_history.php' method='get'><input type='submit' value='Istoric'></form></td>\n";
+  echo "    <td align='left' colspan='4'><form action='".$t_loc."_day_history.php' method='post'><input type='submit' value='Istoric'></form></td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
@@ -250,6 +266,17 @@ if($is_jos)
   echo "   </tr>\n";
 }
 echo "  </table>\n";
+// show logs
+if($log_count > 0)
+{
+echo "  <p>Log:</p>\n";
+echo "  <p>\n";
+for($i = ($log_count - 1); $i >= 0; --$i)
+{
+echo "   ".$log[$i]."<br>\n";
+}
+echo "  </p>\n";
+}
 echo " </body>\n";
 echo "</html>\n";
 ?>

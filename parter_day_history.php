@@ -1,5 +1,38 @@
 <?php
 
+$t_loc = "parter";
+
+$LOC_SUS = "etaj";
+$LOC_JOS = "parter";
+
+$t_loc_file = "";
+$c1_str = "";
+$c2_str = "";
+$c3_str = "";
+$c4_str = "";
+
+if (strpos($t_loc, $LOC_JOS) !== FALSE)
+{
+  $t_loc_file = "jos";
+  $c1_str = "Bucatarie";
+  $c2_str = "Living";
+  $c3_str = "Birou";
+  $c4_str = "Baie parter";
+}
+else if (strpos($t_loc, $LOC_SUS) !== FALSE)
+{
+  $t_loc_file = "sus";
+  $c1_str = "Dormitor Luca";
+  $c2_str = "Dormitor matrimonial";
+  $c3_str = "Dormitor oaspeti";
+  $c4_str = "Baie etaj";
+}
+else
+{
+  error_log("ERROR - Unknown t_loc: ".$t_loc);
+  exit("ERROR - Unknown t_loc: ".$t_loc);
+}
+
 //// current date and time
 $format = "%Y.%m.%d %H:%M:%S";
 $now = strftime($format);
@@ -51,16 +84,16 @@ $t_mrow = date('Y.m.d', strtotime('+1 day', strtotime($t_day_s)));
 sscanf($t_mrow, "%d.%d.%d", $ts_tY, $ts_tM, $ts_tD);
 $t_mrow_s = sprintf("%d.%d.%d", $ts_tY, $ts_tM, $ts_tD);
 
-$image_file_name = "data/jos_history.jpg";
+$image_file_name = "data/".$t_loc_file."_history.jpg";
 $image_exist = FALSE;
-$image_day_file_name = "data/jos_history_".$t_day.".jpg";
+$image_day_file_name = "data/".$t_loc_file."_history_".$t_day.".jpg";
 
 //echo $y_day." ".$t_day." ".$t_mrow."\n";
 
-$avg_file_name = "data/jos_avg.txt";
-$t_day_file_name = "data/jos_" . $t_day . ".txt";
-$y_day_file_name = "data/jos_" . $y_day_s . ".txt";
-$t_mrow_file_name = "data/jos_" . $t_mrow_s . ".txt";
+$avg_file_name = "data/".$t_loc_file."_avg.txt";
+$t_day_file_name = "data/".$t_loc_file."_" . $t_day . ".txt";
+$y_day_file_name = "data/".$t_loc_file."_" . $y_day_s . ".txt";
+$t_mrow_file_name = "data/".$t_loc_file."_" . $t_mrow_s . ".txt";
 $log_file_name = "data/log_" . $t_day . ".txt";
 
 $has_y_day = is_file($y_day_file_name);
@@ -77,11 +110,6 @@ $vn = array (
     "c4" => array(),
     "c4_r" => array(),
 );
-
-$c1_str = "Bucatarie";
-$c2_str = "Living";
-$c3_str = "Birou";
-$c4_str = "Baie parter";
 
 $c1_color_str = "green";
 $c2_color_str = "orange";
@@ -279,9 +307,6 @@ else
   }
 }
 
-
-if($image_exist === FALSE)
-{
 //// images
 if(is_file("/usr/share/fonts/truetype/freefont/FreeSerif.ttf"))
   $fontfile = "/usr/share/fonts/truetype/freefont/FreeSerif.ttf";
@@ -362,6 +387,78 @@ $t_gap = 2 * $rad;
 $im_w = (2 * $SIZE - 1) * $w_c + $l_gap + $r_gap;
 $im_h = ($max_img - $min_img) * $h_c + $b_gap + $t_gap;
 
+//// max image temperature
+$p_zec = $max_img % 100; $p_int = ($max_img - $p_zec) / 100;
+$max_img_str = sprintf("%2d.%02d", $p_int, $p_zec);
+$max_img_x = $l_gap - $rad;
+$max_img_y = $t_gap;
+//// min image temperature
+$p_zec = $min_img % 100; $p_int = ($min_img - $p_zec) / 100;
+$min_img_str = sprintf("%2d.%02d", $p_int, $p_zec);
+$min_img_x = $l_gap - $rad;
+$min_img_y = $im_h - $b_gap;
+
+$imgmap = "  <map name='historymap'>\n";
+
+for($i = $SIZE - 1; $i >= 0; --$i)
+{
+  $c_x = $l_gap + 2 * $w_c * ($SIZE - $i - 1);
+  $hm = $vn["hm"][$i];
+  
+  
+  $left_top_x = $c_x - ($rad + $w_c) / 2;
+  $left_top_y = $max_img_y;
+  $right_bott_x = $c_x + ($rad + $w_c) / 2;
+  $right_bott_y = $min_img_y;
+  $imgmap .= "   <area shape='rect' coords='".$left_top_x.", ".$left_top_y.", ".$right_bott_x.", ".$right_bott_y."' alt='Sun' title='".$hm;
+  // Dormitor Luca / Bucatarie
+  $c1 = $vn["c1"][$i];
+  $c1_r = $vn["c1_r"][$i];
+if($c1 !== 0)
+{
+  $p_zec = $c1 % 100; $p_int = ($c1 - $p_zec) / 100;
+  $c1_temp_str = "" . (($p_int < 10) ? " " : "") . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c1_temp_str." - ".$c1_str;
+  if($c1_r !== 0)
+    $imgmap .= " (merge)";
+}
+  // Dormitor matrimonial / Living
+  $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
+if($c2 !== 0)
+{
+  $p_zec = $c2 % 100; $p_int = ($c2 - $p_zec) / 100;
+  $c2_temp_str = "" . (($p_int < 10) ? " " : "") . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c2_temp_str." - ".$c2_str;
+  if($c2_r !== 0)
+    $imgmap .= " (merge)";
+}
+  // Dormitor oaspeti / Birou
+  $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
+if($c3 !== 0)
+{
+  $p_zec = $c3 % 100; $p_int = ($c3 - $p_zec) / 100;
+  $c3_temp_str = "" . (($p_int < 10) ? " " : "") . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c3_temp_str." - ".$c3_str;
+  if($c3_r !== 0)
+    $imgmap .= " (merge)";
+}
+  // Baie 
+  $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
+if($c4 !== 0)
+{
+  $p_zec = $c4 % 100; $p_int = ($c4 - $p_zec) / 100;
+  $c4_temp_str = "" . (($p_int < 10) ? " " : "") . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
+  $imgmap .= "&#13;".$c4_temp_str." - ".$c4_str;
+  if($c4_r !== 0)
+    $imgmap .= " (merge)";
+}
+$imgmap .= "' href=''>\n";
+}
+$imgmap .= "  </map>\n";
+
+
+if($image_exist === FALSE)
+{
 //// the image object
 $image = imagecreatetruecolor($im_w, $im_h);
 //// make white background
@@ -384,7 +481,6 @@ $c4_color = $red_color;
 $p_zec = $max_all % 100; $p_int = ($max_all - $p_zec) / 100;
 $max_str = sprintf("%2d.%02d", $p_int, $p_zec);
 $max_x = $l_gap - $rad;
-//$max_y = $t_gap;
 $max_y = $im_h - (($max_all - $min_img) * $h_c + $b_gap);
 imagettftext($image, $fsz, 0, $im_w - $r_gap + $rad, ($max_y + ($fsz / 2)), $black_color, $fontfile, $max_str);
 imageline($image, $max_x, $max_y, ($im_w - $r_gap), $max_y, $black_color);
@@ -392,27 +488,16 @@ imageline($image, $max_x, $max_y, ($im_w - $r_gap), $max_y, $black_color);
 $p_zec = $min_all % 100; $p_int = ($min_all - $p_zec) / 100;
 $min_str = sprintf("%2d.%02d", $p_int, $p_zec);
 $min_x = $l_gap - $rad;
-//$min_y = $im_h - $b_gap;
 $min_y = $im_h - (($min_all - $min_img) * $h_c + $b_gap);
 imagettftext($image, $fsz, 0, $im_w - $r_gap + $rad, ($min_y + ($fsz / 2)), $black_color, $fontfile, $min_str);
 imageline($image, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
 
 //// max image temperature
-$p_zec = $max_img % 100; $p_int = ($max_img - $p_zec) / 100;
-$max_str = sprintf("%2d.%02d", $p_int, $p_zec);
-$max_x = $l_gap - $rad;
-$max_y = $t_gap;
-imagettftext($image, $fsz, 0, $rad, ($max_y + ($fsz / 2)), $black_color, $fontfile, $max_str);
-imageline($image, $max_x, $max_y, ($im_w - $r_gap), $max_y, $black_color);
+imagettftext($image, $fsz, 0, $rad, ($max_img_y + ($fsz / 2)), $black_color, $fontfile, $max_img_str);
+imageline($image, $max_img_x, $max_img_y, ($im_w - $r_gap), $max_img_y, $black_color);
 //// min image temperature
-$p_zec = $min_img % 100; $p_int = ($min_img - $p_zec) / 100;
-$min_str = sprintf("%2d.%02d", $p_int, $p_zec);
-$min_x = $l_gap - $rad;
-$min_y = $im_h - $b_gap;
-imagettftext($image, $fsz, 0, $rad, ($min_y + ($fsz / 2)), $black_color, $fontfile, $min_str);
-imageline($image, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
-
-$imgmap = "  <map name='historymap'>\n";
+imagettftext($image, $fsz, 0, $rad, ($min_img_y + ($fsz / 2)), $black_color, $fontfile, $min_img_str);
+imageline($image, $min_img_x, $min_img_y, ($im_w - $r_gap), $min_img_y, $black_color);
 
 for($i = $SIZE - 1; $i >= 0; --$i)
 {
@@ -420,18 +505,11 @@ for($i = $SIZE - 1; $i >= 0; --$i)
   $hm = $vn["hm"][$i];
   
   
-  $left_top_x = $c_x - ($rad + $w_c) / 2;
-  $left_top_y = $max_y;
-  $right_bott_x = $c_x + ($rad + $w_c) / 2;
-  $right_bott_y = $min_y;
-  $imgmap .= "   <area shape='rect' coords='".$left_top_x.", ".$left_top_y.", ".$right_bott_x.", ".$right_bott_y."' alt='Sun' title='".$hm;
   // Dormitor Luca / Bucatarie
-  $c1 = $vn["c1"][$i]; $c1_r = $vn["c1_r"][$i];
+  $c1 = $vn["c1"][$i];
+  $c1_r = $vn["c1_r"][$i];
 if($c1 !== 0)
 {
-  $p_zec = $c1 % 100; $p_int = ($c1 - $p_zec) / 100;
-  $c1_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
-  $imgmap .= "&#13;".$c1_temp_str." - ".$c1_str;
   $c1_y = $im_h - (($c1 - $min_img) * $h_c + $b_gap);
   if($c1_r !== 0)
     imagefilledellipse($image, $c_x, $c1_y, $rad, $rad, $c1_color);
@@ -442,9 +520,6 @@ if($c1 !== 0)
   $c2 = $vn["c2"][$i]; $c2_r = $vn["c2_r"][$i];
 if($c2 !== 0)
 {
-  $p_zec = $c2 % 100; $p_int = ($c2 - $p_zec) / 100;
-  $c2_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
-  $imgmap .= "&#13;".$c2_temp_str." - ".$c2_str;
   $c2_y = $im_h - (($c2 - $min_img) * $h_c + $b_gap);
   if($c2_r !== 0)
     imagefilledellipse($image, $c_x, $c2_y, $rad, $rad, $c2_color);
@@ -455,9 +530,6 @@ if($c2 !== 0)
   $c3 = $vn["c3"][$i]; $c3_r = $vn["c3_r"][$i];
 if($c3 !== 0)
 {
-  $p_zec = $c3 % 100; $p_int = ($c3 - $p_zec) / 100;
-  $c3_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
-  $imgmap .= "&#13;".$c3_temp_str." - ".$c3_str;
   $c3_y = $im_h - (($c3 - $min_img) * $h_c + $b_gap);
   if($c3_r !== 0)
     imagefilledellipse($image, $c_x, $c3_y, $rad, $rad, $c3_color);
@@ -468,18 +540,13 @@ if($c3 !== 0)
   $c4 = $vn["c4"][$i]; $c4_r = $vn["c4_r"][$i];
 if($c4 !== 0)
 {
-  $p_zec = $c4 % 100; $p_int = ($c4 - $p_zec) / 100;
-  $c4_temp_str = "" . $p_int . "." . (($p_zec < 10) ? "0" : "") . $p_zec;
-  $imgmap .= "&#13;".$c4_temp_str." - ".$c4_str;
   $c4_y = $im_h - (($c4 - $min_img) * $h_c + $b_gap);
   if($c4_r !== 0)
     imagefilledellipse($image, $c_x, $c4_y, $rad, $rad, $c4_color);
   else
     imageellipse($image, $c_x, $c4_y, $rad, $rad, $c4_color);
 }
-$imgmap .= "' href=''>\n";
 }
-$imgmap .= "  </map>\n";
 //// time name='historymap'
 $hm_y = $im_h - $b_gap + $rad;
 $hm_x = 0;
@@ -498,7 +565,7 @@ for($i = $SIZE - 1; $i >= 0; --$i)
 }
 
 //// temperatures in between
-$bw_y = $min_y - $max_y;
+$bw_y = $min_img_y - $max_img_y;
 $nb_temp = intval($bw_y / ($temp_h + $rad));
 $temp_scale = intval(($max_img - $min_img) / $nb_temp);
 $temp_scale = max($temp_scale, ($temp_h + $rad));
@@ -508,7 +575,7 @@ $inter_x = $l_gap - $rad;
 while(($inter += $temp_scale) < $max_img)
 {
   $inter_y = $im_h - (($inter - $min_img) * $h_c + $b_gap);
-  if(abs($inter_y - $max_y) <= $temp_h)
+  if(abs($inter_y - $max_img_y) <= $temp_h)
   {
     // skip, too close to max_img
     continue;
@@ -536,8 +603,11 @@ if($is_log_file)
   $log_file = fopen($log_file_name, "r");
   while (($line = fgets($log_file)) !== FALSE)
   {
-    $log[$log_count] = $line;
-    ++$log_count;
+    if (strpos($line, $t_loc) !== FALSE)
+    {
+      $log[$log_count] = $line;
+      ++$log_count;
+    }
   }
 }
 
@@ -567,7 +637,7 @@ echo "  </table>\n";
 echo "  <table>\n";
 echo "   <tr>\n";
 echo "    <td align='center' colspan='2'>\n";
-echo "     <form action='etaj_day_history.php' method='post'>\n";
+echo "     <form action='".$t_loc."_day_history.php' method='post'>\n";
 echo "      <input type='hidden' name='t_date' value='".$y_day."'>\n";
 echo "      <input type='submit' value='Istoric ziua precedenta'".(($has_y_day === FALSE) ? " disabled": "").">\n";
 echo "     </form>\n";
@@ -576,7 +646,7 @@ echo "    <td align='center'>\n";
 echo "     <form action='info.php' method='get'><input type='submit' value='Inapoi'></form>\n";
 echo "    </td>\n";
 echo "    <td align='center' colspan='2'>\n";
-echo "     <form action='etaj_day_history.php' method='post'>\n";
+echo "     <form action='".$t_loc."_day_history.php' method='post'>\n";
 echo "      <input type='hidden' name='t_date' value='".$t_mrow."'>\n";
 echo "      <input type='submit' value='Istoric ziua urmatoare'".(($has_t_mrow === FALSE) ? " disabled": "").">\n";
 echo "     </form>\n";
@@ -631,9 +701,9 @@ if($log_count > 0)
 echo "  <p>Log:</p>\n";
 echo "  <p>\n";
 for($i = ($log_count - 1); $i >= 0; --$i)
-  {
+{
 echo "   ".$log[$i]."<br>\n";
-  }
+}
 echo "  </p>\n";
 }
 echo " </body>\n";

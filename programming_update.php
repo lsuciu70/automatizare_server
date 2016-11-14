@@ -70,11 +70,11 @@ for($x = 0; $x < $vn_cnt; $x ++)
 {
   $name = $vn [$x];
   $name_val = $vn_val [$name];
-  $name_file_name = "data/" . $name . ".txt";
+  $name_file = "data/" . $name . ".txt";
   $line = "";
-  if (is_file ( $name_file_name ))
+  if (is_file ( $name_file ))
   {
-    $line = file_get_contents ( $name_file_name );
+    $line = file_get_contents ( $name_file );
     sscanf ( $line, "%d,%d,%d,%d,%d,%d,%d,%d", $name_val [0], $name_val [1], $name_val [2], $name_val [3], $name_val [4], $name_val [5], $name_val [6], $name_val [7] );
   }
   $name_val_changed = FALSE;
@@ -95,10 +95,22 @@ for($x = 0; $x < $vn_cnt; $x ++)
 
   if ($name_val_changed)
   {
-    $name_file_name_date = "/opt/www/data/" . $name . "_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
+    $dbox_file = $name . "_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
+    $name_file_date = "data/" . $dbox_file;
     $line = $name_val [0] . "," . $name_val [1] . "," . $name_val [2] . "," . $name_val [3] . "," . $name_val [4] . "," . $name_val [5] . "," . $name_val [6] . "," . $name_val [7] . "," . $ts_full . PHP_EOL;
-    file_put_contents ( $name_file_name, $line, LOCK_EX );
-    file_put_contents ( $name_file_name_date, $line, FILE_APPEND | LOCK_EX );
+    file_put_contents ( $name_file, $line, LOCK_EX );
+    file_put_contents ( $name_file_date, $line, FILE_APPEND | LOCK_EX );
+    // save to Dropbox
+    include "dbox.php";
+  
+    $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
+        '--header "Authorization: Bearer '.$dbox_k.'" '.
+        '--header "Dropbox-API-Arg: {\"path\": \"/'.$dbox_file.'\", \"mode\": \"overwrite\"}" '.
+        '--header "Content-Type: application/octet-stream" '.
+        '--data-binary @'.$name_file_date;
+    
+    if(system($curl_cmd." &", $retval) === FALSE)
+      error_log($retval);
   }
 }
 ?>

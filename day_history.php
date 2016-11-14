@@ -1,6 +1,6 @@
 <?php
 
-$t_loc = "etaj";
+$t_loc = "";
 
 $LOC_SUS = "etaj";
 $LOC_JOS = "parter";
