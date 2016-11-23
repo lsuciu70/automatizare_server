@@ -59,19 +59,19 @@ $vn = array(
   "next_programm_p4",                                                           
 );                                                                              
 $vn_val = array (
-  $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1),
-  $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15),
-  $vn[2] => array(0, 0, 0, 0, 0, 0, 0, 0),
-  $vn[3] => array(7, 7, 7, 7, 7, 7, 7, 7),
-  $vn[4] => array(0, 0, 0, 0, 0, 0, 0, 0),
-  $vn[5] => array(2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000),
-  $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4),
-  $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30),
-  $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3),
-  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14),
-  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30),
-  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2),
-  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0)
+  $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1), // programming
+  $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15), // start_hour_p1
+  $vn[2] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p1
+  $vn[3] => array(7, 7, 7, 7, 7, 7, 7, 7), // stop_hour_p1
+  $vn[4] => array(0, 0, 0, 0, 0, 0, 0, 0), // stop_minute_p1
+  $vn[5] => array(2100, 2100, 1800, 2200, 2300, 2300, 2300, 2200), // target_temperature_p1
+  $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4), // start_hour_p2
+  $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p2
+  $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3), // next_programm_p2
+  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
+  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
+  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
+  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0) // next_programm_p4
 );
 $var_names_count = count($vn);
 for ($x = 0 ; $x < $var_names_count ; $x++ )
@@ -116,17 +116,17 @@ for ($i = 0 ; $i < 8 ; $i++)
     $smp2 = $vn_val["start_minute_p2"][$i];
     $prog_str[$i] ="P2 - porneste la ".$shp2.":";
     if($smp2 < 10) $prog_str[$i] .= "0";
-    $prog_str[$i] .= $smp2." si face temperatura de la pornire + 0.5 &deg;C";
+    $prog_str[$i] .= $smp2." si face temperatura de la pornire + 0.3 &deg;C";
     break;
   case 3:
     $shp3 = $vn_val["start_hour_p3"][$i];
     $smp3 = $vn_val["start_minute_p3"][$i];
     $prog_str[$i] ="P3 - porneste la ".$shp3.":";
     if($smp3 < 10) $prog_str[$i] .= "0";
-    $prog_str[$i] .= $smp3." si face temperatura de la pornire + 0.5 &deg;C";
+    $prog_str[$i] .= $smp3." si face temperatura de la pornire + 0.3 &deg;C";
     break;
   case 4:
-    $prog_str[$i] = "P4 - porneste acum si face temperatura de la pornire + 0.5 &deg;C";
+    $prog_str[$i] = "P4 - porneste acum si face temperatura de la pornire + 0.3 &deg;C";
     break;
   default:
     $prog_str[$i] = "Program necunoscut: ".$p;

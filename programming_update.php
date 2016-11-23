@@ -14,7 +14,6 @@ if(isset($_POST["t_loc"]) === FALSE)
 $LOC_SUS = "etaj";
 $LOC_JOS = "parter";
   
-$t_loc = "";
 $location_offset = 0;
 $t_loc = htmlspecialchars ( $_POST ["t_loc"] );
 if (strpos ( $t_loc, $LOC_JOS ) !== FALSE)
@@ -51,19 +50,19 @@ $vn = array (
 );
 $vn_cnt = count ( $vn );
 $vn_val = array (
-  $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1),
-  $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15),
-  $vn[2] => array(0, 0, 0, 0, 0, 0, 0, 0),
-  $vn[3] => array(7, 7, 7, 7, 7, 7, 7, 7),
-  $vn[4] => array(0, 0, 0, 0, 0, 0, 0, 0),
-  $vn[5] => array(2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000),
-  $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4),
-  $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30),
-  $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3),
-  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14),
-  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30),
-  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2),
-  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0)
+  $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1), // programming
+  $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15), // start_hour_p1
+  $vn[2] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p1
+  $vn[3] => array(7, 7, 7, 7, 7, 7, 7, 7), // stop_hour_p1
+  $vn[4] => array(0, 0, 0, 0, 0, 0, 0, 0), // stop_minute_p1
+  $vn[5] => array(2100, 2100, 1800, 2200, 2300, 2300, 2300, 2200), // target_temperature_p1
+  $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4), // start_hour_p2
+  $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p2
+  $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3), // next_programm_p2
+  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
+  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
+  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
+  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0) // next_programm_p4
 );
 
 for($x = 0; $x < $vn_cnt; $x ++)
