@@ -29,12 +29,15 @@ else
 
 $ip_file_name = "data/" . $t_loc . "_ip.txt";
 if (is_file($ip_file_name))
+{
   $t_ip = file_get_contents($ip_file_name);
-else if ($location_offset === 0)
-  $t_ip = "192.168.100.20";
-else if ($location_offset === 4)
-  $t_ip = "192.168.100.48";
-
+}
+else
+{
+  error_log( "ERROR - Unknown t_loc: " . $t_loc );
+  exit ( "ERROR - Unknown t_loc: " . $t_loc );
+}
+  
 $vn = array(
   "programming",
   "start_hour_p1",

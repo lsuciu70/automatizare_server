@@ -1,7 +1,7 @@
 <?php
 $users = array(
-  "lsuciu" => ";-)",
-  "cami" => ";-)",
+  "user1" => "pwd1",
+  "user2" => "pwd2",
 );
 
 $users_file_name = "data/.users";

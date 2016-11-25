@@ -33,10 +33,12 @@ if (is_file($ip_file_name))
 {
   $t_ip = file_get_contents($ip_file_name);
 }
-else if ($location_offset === 0)
-  $t_ip = "192.168.100.20";
-else if ($location_offset === 4)
-  $t_ip = "192.168.100.48";
+else
+{
+  error_log( "ERROR - Unknown IP address for " . $t_loc );
+  exit ( "ERROR - Unknown IP address for " . $t_loc );
+}
+  
 
 $post_data = "";
 foreach ($_POST as $key => $value)
