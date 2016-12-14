@@ -43,10 +43,13 @@ $vn = array (
   "start_hour_p2",
   "start_minute_p2",
   "next_programm_p2",
+  "target_temperature_p2",
   "start_hour_p3",
   "start_minute_p3",
   "next_programm_p3",
-  "next_programm_p4" 
+  "target_temperature_p3",
+  "next_programm_p4",
+  "target_temperature_p4"
 );
 $vn_cnt = count ( $vn );
 $vn_val = array (
@@ -59,16 +62,20 @@ $vn_val = array (
   $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4), // start_hour_p2
   $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p2
   $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3), // next_programm_p2
-  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
-  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
-  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
-  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0) // next_programm_p4
+  $vn[9] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p2
+  $vn[10] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
+  $vn[11] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
+  $vn[12] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
+  $vn[13] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p3
+  $vn[14] => array(0, 0, 0, 0, 0, 0, 0, 0), // next_programm_p4
+  $vn[15] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p4
 );
 
 for($x = 0; $x < $vn_cnt; $x ++)
 {
   $name = $vn [$x];
   $name_val = $vn_val [$name];
+  $name_val_post = $vn_val [$name];
   $name_file = "data/" . $name . ".txt";
   $line = "";
   if (is_file ( $name_file ))
@@ -77,7 +84,6 @@ for($x = 0; $x < $vn_cnt; $x ++)
     sscanf ( $line, "%d,%d,%d,%d,%d,%d,%d,%d", $name_val [0], $name_val [1], $name_val [2], $name_val [3], $name_val [4], $name_val [5], $name_val [6], $name_val [7] );
   }
   $name_val_changed = FALSE;
-  $name_val_post = array ($NOT_SET, $NOT_SET, $NOT_SET, $NOT_SET, $NOT_SET, $NOT_SET, $NOT_SET, $NOT_SET);
 
   for($i = 0; $i < 4; $i ++)
   {
@@ -85,7 +91,10 @@ for($x = 0; $x < $vn_cnt; $x ++)
     if (isset ( $_POST [($name . "_" . $i)] ))
     {
       $name_val_post [$j] = htmlspecialchars ( $_POST [($name . "_" . $i)] );
-      if (strpos ( $name, "target_temperature_p1" ) !== FALSE)
+      if (strpos ( $name, "target_temperature_p1" ) !== FALSE || 
+          strpos ( $name, "target_temperature_p2" ) !== FALSE ||
+          strpos ( $name, "target_temperature_p3" ) !== FALSE ||
+          strpos ( $name, "target_temperature_p4" ) !== FALSE)
         $name_val_post [$j] = intval ( floatval ( $name_val_post [$j] ) * 100 );
       $name_val_changed = $name_val_changed || intval ( $name_val_post [$j] ) != $name_val [$j];
       $name_val [$j] = intval ( $name_val_post [$j] );
@@ -94,22 +103,28 @@ for($x = 0; $x < $vn_cnt; $x ++)
 
   if ($name_val_changed)
   {
-    $dbox_file = $name . "_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-    $name_file_date = "data/" . $dbox_file;
     $line = $name_val [0] . "," . $name_val [1] . "," . $name_val [2] . "," . $name_val [3] . "," . $name_val [4] . "," . $name_val [5] . "," . $name_val [6] . "," . $name_val [7] . "," . $ts_full . PHP_EOL;
     file_put_contents ( $name_file, $line, LOCK_EX );
-    file_put_contents ( $name_file_date, $line, FILE_APPEND | LOCK_EX );
-    // save to Dropbox
-    include "dbox.php";
-  
-    $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
-        '--header "Authorization: Bearer '.$dbox_k.'" '.
-        '--header "Dropbox-API-Arg: {\"path\": \"/'.$dbox_file.'\", \"mode\": \"overwrite\"}" '.
-        '--header "Content-Type: application/octet-stream" '.
-        '--data-binary @'.$name_file_date;
+    // do not continue for target tempereatures P2 - P4
+    if (strpos ( $name, "target_temperature_p2" ) === FALSE &&
+        strpos ( $name, "target_temperature_p3" ) === FALSE &&
+        strpos ( $name, "target_temperature_p4" ) === FALSE)
+    {
+      $dbox_file = $name . "_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
+      $name_file_date = "data/" . $dbox_file;
+      file_put_contents ( $name_file_date, $line, FILE_APPEND | LOCK_EX );
+      // save to Dropbox
+      include "dbox.php";
     
-    if(system($curl_cmd." &", $retval) === FALSE)
-      error_log($retval);
+      $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
+          '--header "Authorization: Bearer '.$dbox_k.'" '.
+          '--header "Dropbox-API-Arg: {\"path\": \"/'.$dbox_file.'\", \"mode\": \"overwrite\"}" '.
+          '--header "Content-Type: application/octet-stream" '.
+          '--data-binary @'.$name_file_date;
+      
+      if(system($curl_cmd." &", $retval) === FALSE)
+        error_log($retval);
+    }
   }
 }
 ?>

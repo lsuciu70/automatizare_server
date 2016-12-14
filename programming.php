@@ -81,10 +81,13 @@ $vn = array(
   "start_hour_p2",
   "start_minute_p2",
   "next_programm_p2",
+  "target_temperature_p2",
   "start_hour_p3",
   "start_minute_p3",
   "next_programm_p3",
+  "target_temperature_p3",
   "next_programm_p4",
+  "target_temperature_p4",
 );
 $vn_val = array (
   $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1), // programming
@@ -96,10 +99,13 @@ $vn_val = array (
   $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4), // start_hour_p2
   $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p2
   $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3), // next_programm_p2
-  $vn[9] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
-  $vn[10] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
-  $vn[11] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
-  $vn[12] => array(0, 0, 0, 0, 0, 0, 0, 0) // next_programm_p4
+  $vn[9] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p2
+  $vn[10] => array(14, 14, 14, 14, 14, 14, 14, 14), // start_hour_p3
+  $vn[11] => array(30, 30, 30, 30, 30, 30, 30, 30), // start_minute_p3
+  $vn[12] => array(2, 2, 2, 2, 2, 2, 2, 2), // next_programm_p3
+  $vn[13] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p3
+  $vn[14] => array(0, 0, 0, 0, 0, 0, 0, 0), // next_programm_p4
+  $vn[15] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p4
 );
 $vn_cnt = count($vn);
 for ($x = 0 ; $x < $vn_cnt ; $x++ )
@@ -123,10 +129,19 @@ $tp1_int = intval(($tp1 - $tp1_zec) / 100);
 $shp2 = $vn_val["start_hour_p2"][$index];
 $smp2 = $vn_val["start_minute_p2"][$index];
 $npp2 = $vn_val["next_programm_p2"][$index];
+$tp2 = $vn_val["target_temperature_p2"][$index];
+$tp2_zec = $tp2 % 100;
+$tp2_int = intval(($tp2 - $tp2_zec) / 100);
 $shp3 = $vn_val["start_hour_p3"][$index];
 $smp3 = $vn_val["start_minute_p3"][$index];
 $npp3 = $vn_val["next_programm_p3"][$index];
+$tp3 = $vn_val["target_temperature_p3"][$index];
+$tp3_zec = $tp3 % 100;
+$tp3_int = intval(($tp3 - $tp3_zec) / 100);
 $npp4 = $vn_val["next_programm_p4"][$index];
+$tp4 = $vn_val["target_temperature_p4"][$index];
+$tp4_zec = $tp4 % 100;
+$tp4_int = intval(($tp4 - $tp4_zec) / 100);
 
 $prog_str_0 = "P0 - oprit";
 
@@ -135,20 +150,44 @@ if($smp1 < 10) $prog_str_1 .= "0";
 $prog_str_1 .= $smp1." si ".$ehp1.":";
 if($emp1 < 10) $prog_str_1 .= "0";
 $prog_str_1 .= $emp1;
-if($shp1 > $ehp1) $prog_str_1 .= " (ziua urmatoare)";
+if($shp1 > $ehp1 || ($shp1 === $ehp1 && $smp1 >= $emp1)) $prog_str_1 .= " (ziua urmatoare)";
 $prog_str_1 .= " si face ".$tp1_int.".";
 if($tp1_zec < 10) $prog_str_1 .= "0";
 $prog_str_1 .= $tp1_zec." &deg;C";
 
 $prog_str_2 ="P2 - porneste la ".$shp2.":";
 if($smp2 < 10) $prog_str_2 .= "0";
-$prog_str_2 .= $smp2." si face temperatura de la pornire + 0.3 &deg;C";
+$prog_str_2 .= $smp2;
+$prog_str_2 .= " si face ";
+if($tp2 !== 0)
+{
+  $prog_str_2 .= $tp2_int.".";
+  if($tp2_zec < 10) $prog_str_2 .= "0";
+  $prog_str_2 .= $tp2_zec." &deg;C";
+}
+else $prog_str_2 .= "temperatura de la pornire + 0.3 &deg;C";
 
 $prog_str_3 ="P3 - porneste la ".$shp3.":";
 if($smp3 < 10) $prog_str_3 .= "0";
-$prog_str_3 .= $smp3." si face temperatura de la pornire + 0.3 &deg;C";
+$prog_str_3 .= $smp3;
+$prog_str_3 .= " si face ";
+if($tp3 !== 0)
+{
+  $prog_str_3 .= $tp3_int.".";
+  if($tp3_zec < 10) $prog_str_3 .= "0";
+  $prog_str_3 .= $tp3_zec." &deg;C";
+}
+else $prog_str_3 .= "temperatura de la pornire + 0.3 &deg;C";
 
-$prog_str_4 = "P4 - porneste acum si face temperatura de la pornire + 0.3 &deg;C";
+$prog_str_4 = "P4 - porneste acum";
+$prog_str_4 .= " si face ";
+if($tp4 !== 0)
+{
+  $prog_str_4 .= $tp4_int.".";
+  if($tp4_zec < 10) $prog_str_4 .= "0";
+  $prog_str_4 .= $tp4_zec." &deg;C";
+}
+else $prog_str_4 .= "temperatura de la pornire + 0.3 &deg;C";
 ?>
 <!DOCTYPE html>
 <html>

@@ -62,7 +62,7 @@ $vn_val = array (
   $vn[2] => array(0, 0, 0, 0, 0, 0, 0, 0),
   $vn[3] => array(7, 7, 7, 7, 7, 7, 7, 7),
   $vn[4] => array(0, 0, 0, 0, 0, 0, 0, 0),
-  $vn[5] => array(2100, 2100, 1800, 2100, 2300, 2300, 2300, 2100),
+  $vn[5] => array(2000, 2000, 1900, 2000, 2400, 2400, 2300, 2100),
   $vn[6] => array(4, 4, 4, 4, 4, 4, 4, 4),
   $vn[7] => array(30, 30, 30, 30, 30, 30, 30, 30),
   $vn[8] => array(3, 3, 3, 3, 3, 3, 3, 3),
@@ -89,7 +89,10 @@ for ($x = 0 ; $x < $vn_cnt ; $x++ )
   {
     for ($y = 0 ; $y < 8 ; $y++ )
     {
-      $name_val[$y] = floatval($name_val[$y]) / 100;
+      $dec_part = $name_val[$y] % 100;
+      $int_part = intval(($name_val[$y] - $dec_part) / 100);
+      $name_val[$y] = sprintf("%d.%02d", $int_part, $dec_part);
+//       $name_val[$y] = floatval($name_val[$y]) / 100;
     }
   }
   for ($i = 0;$i < 4;$i++)
@@ -98,6 +101,7 @@ for ($x = 0 ; $x < $vn_cnt ; $x++ )
     $post_data[$i] = $post_data[$i] . "&" . $name . "_" . $i . "=" . $name_val[$j];
   }
 }
+// error_log("programming_send_back.php - post data: " . $post_data);
 
 // send back the post requests
 $url = "http://" . $t_ip;
