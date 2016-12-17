@@ -108,10 +108,10 @@ $url = "http://" . $t_ip;
 for ($i = 0;$i < 4;$i++)
 {
   $header = array(
-    "POST / HTTP/1.1",
-    "Host: " . $t_ip,
+    "POST /programming.html HTTP/1.1",
+    "Host: " . $_SERVER['SERVER_ADDR'],
     "User-Agent: curl/7.24.0",
-    "Accept: */*",
+    "Accept: programming",
     "Content-Type: application/x-www-form-urlencoded",
     "Content-Length: " . strlen($post_data[$i])
   );
@@ -122,8 +122,7 @@ for ($i = 0;$i < 4;$i++)
   curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data[$i]);
   $data = curl_exec($ch);
   if (curl_errno($ch))
-    error_log("programming_send_back.php - ERROR: " . curl_error($ch));
+    error_log("programming_send_back.php - ERROR: " . curl_error($ch) . " POST data: ".$post_data[$i]);
   curl_close($ch);
-// error_log("programming_send_back.php -> ".$t_ip." (".strlen($post_data[$i]).") - ".$post_data[$i]);
 }
 ?>

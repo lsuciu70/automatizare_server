@@ -51,12 +51,12 @@ if(strlen($post_data) > 0)
   $post_data = substr($post_data, 1);
   $url = "http://" . $t_ip;
   $header = array(
-      "POST / HTTP/1.1",
-      "Host: " . $t_ip,
-      "User-Agent: curl/7.24.0",
-      "Accept: */*",
-      "Content-Type: application/x-www-form-urlencoded",
-      "Content-Length: " . strlen($post_data)
+    "POST /programming HTTP/1.1",
+    "Host: " . $_SERVER['SERVER_ADDR'],
+    "User-Agent: curl/7.24.0",
+    "Accept: programming",
+    "Content-Type: application/x-www-form-urlencoded",
+    "Content-Length: " . strlen($post_data)
   );
   $ch = curl_init($url);
   curl_setopt($ch, CURLOPT_URL, $url);
@@ -65,8 +65,7 @@ if(strlen($post_data) > 0)
   curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
   $data = curl_exec($ch);
   if (curl_errno($ch))
-    error_log("programming_save.php - ERROR: " . curl_error($ch));
+    error_log("programming_save.php - ERROR: " . curl_error($ch) . " POST data: ".$post_data);
   curl_close($ch);
 }
-// error_log("programming_save.php -> ".$t_ip." (".strlen($post_data).") - ".$post_data);
 ?>
