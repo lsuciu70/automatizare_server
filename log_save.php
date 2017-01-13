@@ -11,7 +11,7 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST')
   {
     file_put_contents($log_file, (htmlspecialchars($_POST["t_log"]) . PHP_EOL), FILE_APPEND | LOCK_EX);
     // save to Dropbox
-    include "dbox.php";
+    include_once "dbox.php";
   
     $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
         '--header "Authorization: Bearer '.$dbox_k.'" '.

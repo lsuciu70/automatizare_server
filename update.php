@@ -161,7 +161,7 @@ file_put_contents($avg_file, $line, LOCK_EX);
 // save to Dropbox
 if($is_dbox)
 {
-  include "dbox.php";
+  include_once "dbox.php";
 
   $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
       '--header "Authorization: Bearer '.$dbox_k.'" '.

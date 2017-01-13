@@ -114,7 +114,7 @@ for($x = 0; $x < $vn_cnt; $x ++)
       $name_file_date = "data/" . $dbox_file;
       file_put_contents ( $name_file_date, $line, FILE_APPEND | LOCK_EX );
       // save to Dropbox
-      include "dbox.php";
+      include_once "dbox.php";
     
       $curl_cmd = 'curl -k -X POST https://content.dropboxapi.com/2/files/upload '.
           '--header "Authorization: Bearer '.$dbox_k.'" '.

@@ -219,9 +219,9 @@ $h_c = 1;
 $w_c = 4;
 
 //// temperature text width & height
-$temp_box = imagettfbbox($fsz, 0, $fontfile, "00.00");
-$temp_w = $temp_box[2] - $temp_box[0];
-$temp_h = $temp_box[1] - $temp_box[7];
+$text_box = imagettfbbox($fsz, 0, $fontfile, "00.00");
+$text_w = $text_box[2] - $text_box[0];
+$$text_h = $text_box[1] - $text_box[7];
 // echo "temp_w=".$temp_w.", temp_h=".$temp_h."\n";
 //// time text width & height
 $time_box = imagettfbbox($fsz, 0, $fontfile, "00:00-00:00");
@@ -237,7 +237,7 @@ $title_w = $c1_w + $c2_w + $c3_w + $c4_w;
 $title_h = $c3_h;
 
 //// lelft and right gaps
-$l_gap = 2 * $rad + $temp_w;
+$l_gap = 2 * $rad + $text_w;
 $r_gap = $l_gap;
 //// bottom and top gaps
 $b_gap = 3 * $rad + $time_h;
@@ -426,7 +426,7 @@ imageline($image, $min_x, $min_y, ($im_w - $r_gap), $min_y, $black_color);
 
 //// temperatures in between
 $bw_y = $min_y - $max_y;
-$nb_temp = intval($bw_y / ($temp_h + $rad));
+$nb_temp = intval($bw_y / ($$text_h + $rad));
 $temp_scale = intval(($max_img - $min_img) / $nb_temp);
 $temp_scale = 2 * ($temp_scale - ($temp_scale % 10));
 $inter = $min_img;
@@ -434,7 +434,7 @@ $inter_x = $l_gap - $rad;
 while(($inter += $temp_scale) < $max_img)
 {
   $inter_y = $im_h - (($inter - $min_img) * $h_c + $b_gap);
-  if(abs($inter_y - $max_y) <= $temp_h)
+  if(abs($inter_y - $max_y) <= $$text_h)
   {
     // skip, too close to max_img
     continue;

@@ -16,13 +16,9 @@ $LOC_SUS = "etaj";
 $LOC_JOS = "parter";
   
 $t_loc = "";
-$location_offset = 0;
 $t_loc = htmlspecialchars ( $_POST ["t_loc"] );
-if (strpos ( $t_loc, $LOC_JOS ) !== FALSE)
-  $location_offset = 0;
-else if (strpos ( $t_loc, $LOC_SUS ) !== FALSE)
-  $location_offset = 4;
-else
+if (strpos ( $t_loc, $LOC_JOS ) === FALSE &&
+    strpos ( $t_loc, $LOC_SUS ) === FALSE)
 {
   error_log( "ERROR - Unknown t_loc: " . $t_loc );
   exit ( "ERROR - Unknown t_loc: " . $t_loc );

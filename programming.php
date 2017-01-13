@@ -4,6 +4,7 @@ if (!isset($_SERVER['PHP_AUTH_USER']))
 {
   header('WWW-Authenticate: Basic realm="CLLS Programming"');
   header('HTTP/1.0 401 Unauthorized');
+  header( "refresh:5;url=info.php" );
   die ("401 - Not authorized; authentication required!");
 }
 
@@ -25,6 +26,7 @@ if (!$validated)
 {
   header('WWW-Authenticate: Basic realm="CLLS Programming"');
   header('HTTP/1.0 401 Unauthorized');
+  header( "refresh:5;url=info.php" );
   die ("401 - Not authorized; wrong user or password!");
 }
 

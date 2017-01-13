@@ -1,283 +1,82 @@
-<?php                         
-// make client to refresh every 10 seconds
-$url1=$_SERVER['REQUEST_URI'];
-header("Refresh: 10; URL=$url1");
+<?php
+include_once 'file_helper.php';
+include_once 'time_helper.php';
+include_once 'temperature_helper.php';
 
-$HOURS = 6;
-$MEAS_PER_HOUR = 6;
-$SIZE = $HOURS * $MEAS_PER_HOUR;
+$debug = FALSE;
 
-// current date and time
-$format = "%Y.%m.%d %H:%M:%S";
-$now_ts = strftime($format);
-sscanf($now_ts, "%d.%d.%d %d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
-$y_day = date('Y.m.d', strtotime('-1 day'));
-sscanf($y_day, "%d.%d.%d", $ts_yY, $ts_yM, $ts_yD);
+$day = "";
 
-$vn = array (
-    "hm" => array(),
-    "bu" => array(),
-    "bu_r" => array(),
-    "li" => array(),
-    "li_r" => array(),
-    "bi" => array(),
-    "bi_r" => array(),
-    "bj" => array(),
-    "bj_r" => array(),
-    "dl" => array(),
-    "dl_r" => array(),
-    "dm" => array(),
-    "dm_r" => array(),
-    "d3" => array(),
-    "d3_r" => array(),
-    "bs" => array(),
-    "bs_r" => array(),
-);
-
-$m_start = $ts_m - ($ts_m % 10);
-$h_start = $ts_h;
-$m_stop = $ts_m;
-$h_stop = $ts_h;
-$hm_start = sprintf("%02d:%02d", $h_start, $m_start);
-if($m_start === $ts_m)
-  $hm_start_stop = $hm_start;
+if (isset($_SERVER['REQUEST_METHOD']) !== FALSE && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST["t_date"]) !== FALSE)
+  $day = htmlspecialchars($_POST["t_date"]);
 else
-  $hm_start_stop = sprintf("%02d:%02d-%02d:%02d", $h_start, $m_start, $h_stop, $m_stop);
+  $day = strftime("%Y.%m.%d");
 
-$vn["hm"][0] = $hm_start_stop;
-for($i = 1; $i <= $SIZE; ++$i)
+// if ($debug)
+//   $day = "2016.12.26";
+
+if(isset($_SERVER['REQUEST_URI']) !== FALSE && is_today($day))
 {
-  $m_stop = $m_start;
-  $h_stop = $h_start;
-  $m_start -= 10;
-  if($m_start < 0)
-  {
-    $m_start = 50;
-    $h_start -= 1;
-  }
-  if($h_start < 0)
-  {
-    $h_start = 23;
-  }
-  $hm_start_stop = sprintf("%02d:%02d-%02d:%02d", $h_start, $m_start, $h_stop, $m_stop);
-  $vn["hm"][$i] = $hm_start_stop;
+  $req_uri=$_SERVER['REQUEST_URI'];
+  header("Refresh: 150; URL=$req_uri");
 }
 
-// get jos average file
-$ok = FALSE;
-$file_name = "data/jos_avg.txt";
-if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
+$day_history_data = day_history(strip_prepend_zero($day));
+if(is_today($day))
 {
-  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
-  if(strpos($jos_dt, $hm_start) === 0)
-  {
-    // ok
-    $ok = TRUE;
-    $vn["bu"][0] = $t_bu;
-    $vn["bu_r"][0] = $t_bu_r;
-    $vn["li"][0] = $t_li;
-    $vn["li_r"][0] = $t_li_r;
-    $vn["bi"][0] = $t_bi;
-    $vn["bi_r"][0] = $t_bi_r;
-    $vn["bj"][0] = $t_bj;
-    $vn["bj_r"][0] = $t_bj_r;
-  }
-}
-if($ok === FALSE)
-{
-  $vn["bu"][0] = 0;
-  $vn["bu_r"][0] = 0;
-  $vn["li"][0] = 0;
-  $vn["li_r"][0] = 0;
-  $vn["bi"][0] = 0;
-  $vn["bi_r"][0] = 0;
-  $vn["bj"][0] = 0;
-  $vn["bj_r"][0] = 0;
-}
-$ok = FALSE;
-$file_name = "data/sus_avg.txt";
-if(is_file($file_name) && ($avg = file_get_contents($file_name)) !== FALSE)
-{
-  sscanf($avg, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
-  if(strpos($sus_dt, $hm_start) === 0)
-  {
-    // ok
-    $ok = TRUE;
-    $vn["dl"][0] = $t_dl;
-    $vn["dl_r"][0] = $t_dl_r;
-    $vn["dm"][0] = $t_dm;
-    $vn["dm_r"][0] = $t_dm_r;
-    $vn["d3"][0] = $t_d3;
-    $vn["d3_r"][0] = $t_d3_r;
-    $vn["bs"][0] = $t_bs;
-    $vn["bs_r"][0] = $t_bs_r;
-  }
-}
-if($ok === FALSE)
-{
-    $vn["dl"][0] = 0;
-    $vn["dl_r"][0] = 0;
-    $vn["dm"][0] = 0;
-    $vn["dm_r"][0] = 0;
-    $vn["d3"][0] = 0;
-    $vn["d3_r"][0] = 0;
-    $vn["bs"][0] = 0;
-    $vn["bs_r"][0] = 0;
+  save_day_history("data/sus_avg.txt", $day_history_data, 0);
+  save_day_history("data/jos_avg.txt", $day_history_data, 8);
+  save_day_history("data/sus_temp.txt", $day_history_data, 0);
+  save_day_history("data/jos_temp.txt", $day_history_data, 8);
 }
 
-$lines = array();
-$count = 0;
-$jos_file_name = "data/jos_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-if(is_file($jos_file_name))
+$y_day = the_day_before($day);
+$t_mrow = the_day_after($day);
+
+$sus_yday_file_name = "data/sus_" . $y_day . ".txt";
+$sus_tmrow_file_name = "data/sus_" . $t_mrow . ".txt";
+$jos_yday_file_name = "data/sus_" . $y_day . ".txt";
+$sos_tmrow_file_name = "data/sus_" . $t_mrow . ".txt";
+$has_y_day = is_file($sus_yday_file_name) || is_file($sus_yday_file_name);
+$has_t_mrow = is_file($sus_tmrow_file_name) || is_file($sus_tmrow_file_name);
+
+$room = array (
+    "Dormitor Luca",
+    "Dormitor matrimonial",
+    "Dormitor oaspeti",
+    "Baie etaj",
+    "Bucatarie",
+    "Living",
+    "Birou",
+    "Baie parter",
+    "Etaj",
+    "Parter",
+    "Total"
+);
+$room_count = count($room);
+
+include_once 'history_helper_summary.php';
+include_once 'history_helper_image.php';
+
+// logs
+$log = array();
+$log_count = 0;
+$log_file_name = "data/log_" . strip_prepend_zero ( $day ) . ".txt";
+$is_log_file = is_file($log_file_name);
+if($is_log_file)
 {
-  $file = new SplFileObject($jos_file_name);
-  if($file->isReadable())
+  $log_file = fopen($log_file_name, "r");
+  while (($line = fgets($log_file)) !== FALSE)
   {
-    $file->seek($file->getSize());
-    $curr_line = $file->key();
-    $count = 0;
-    while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
+//     if (strpos($line, $t_loc) !== FALSE)
     {
-      $file->seek($curr_line);
-      $line = $file->current();
-      if(($idx = strrpos($line, ",")) !== FALSE)
-      {
-        $key = substr($line, $idx + 1, 11);
-      }
-      $lines[$key] = $line;
-    }
-  }
-}
-if($count <= $SIZE)
-{
-  $sus_file_name = "data/sus_" . $ts_yY . "." . $ts_yM . "." . $ts_yD . ".txt";
-  if(is_file($sus_file_name))
-  {
-    $file = new SplFileObject($sus_file_name);
-    if($file->isReadable())
-    {
-      $file->seek($file->getSize());
-      $curr_line = $file->key();
-      while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
-      {
-        $file->seek($curr_line);
-        $line = $file->current();
-        if(($idx = strrpos($line, ",")) !== FALSE)
-        {
-          $key = substr($line, $idx + 1, 11);
-        }
-        $lines[$key] = $line;
-      }
+      $log[$log_count] = $line;
+      ++$log_count;
     }
   }
 }
 
-for($i = 1; $i <= $SIZE; ++$i)
-{
-  $key = $vn["hm"][$i];
-  if(array_key_exists($key, $lines))
-  {
-    $line = $lines[$key];
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_dt);
-    $vn["bu"][$i] = $t_bu;
-    $vn["bu_r"][$i] = $t_bu_r;
-    $vn["li"][$i] = $t_li;
-    $vn["li_r"][$i] = $t_li_r;
-    $vn["bi"][$i] = $t_bi;
-    $vn["bi_r"][$i] = $t_bi_r;
-    $vn["bj"][$i] = $t_bj;
-    $vn["bj_r"][$i] = $t_bj_r;
-  }
-  else
-  {
-    $vn["bu"][$i] = 0;
-    $vn["bu_r"][$i] = 0;
-    $vn["li"][$i] = 0;
-    $vn["li_r"][$i] = 0;
-    $vn["bi"][$i] = 0;
-    $vn["bi_r"][$i] = 0;
-    $vn["bj"][$i] = 0;
-    $vn["bj_r"][$i] = 0;
-  }
-}
-
-$lines = array();
-$sus_file_name = "data/sus_" . $ts_Y . "." . $ts_M . "." . $ts_D . ".txt";
-if(is_file($sus_file_name))
-{
-  $file = new SplFileObject($sus_file_name);
-  if($file->isReadable())
-  {
-    $file->seek($file->getSize());
-    $curr_line = $file->key();
-    $count = 0;
-    while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
-    {
-      $file->seek($curr_line);
-      $line = $file->current();
-      if(($idx = strrpos($line, ",")) !== FALSE)
-      {
-        $key = substr($line, $idx + 1, 11);
-      }
-      $lines[$key] = $line;
-    }
-  }
-}
-if($count <= $SIZE)
-{
-  $sus_file_name = "data/sus_" . $ts_yY . "." . $ts_yM . "." . $ts_yD . ".txt";
-  if(is_file($sus_file_name))
-  {
-    $file = new SplFileObject($sus_file_name);
-    if($file->isReadable())
-    {
-      $file->seek($file->getSize());
-      $curr_line = $file->key();
-      while ((--$curr_line) >= 0 && (++$count) <= $SIZE)
-      {
-        $file->seek($curr_line);
-        $line = $file->current();
-        if(($idx = strrpos($line, ",")) !== FALSE)
-        {
-          $key = substr($line, $idx + 1, 11);
-        }
-        $lines[$key] = $line;
-      }
-    }
-  }
-}
-
-for($i = 1; $i <= $SIZE; ++$i)
-{
-  $key = $vn["hm"][$i];
-  if(array_key_exists($key, $lines))
-  {
-    $line = $lines[$key];
-    sscanf($line, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_dt);
-    $vn["dl"][$i] = $t_dl;
-    $vn["dl_r"][$i] = $t_dl_r;
-    $vn["dm"][$i] = $t_dm;
-    $vn["dm_r"][$i] = $t_dm_r;
-    $vn["d3"][$i] = $t_d3;
-    $vn["d3_r"][$i] = $t_d3_r;
-    $vn["bs"][$i] = $t_bs;
-    $vn["bs_r"][$i] = $t_bs_r;
-  }
-  else
-  {
-    $vn["dl"][$i] = 0;
-    $vn["dl_r"][$i] = 0;
-    $vn["dm"][$i] = 0;
-    $vn["dm_r"][$i] = 0;
-    $vn["d3"][$i] = 0;
-    $vn["d3_r"][$i] = 0;
-    $vn["bs"][$i] = 0;
-    $vn["bs_r"][$i] = 0;
-  }
-}
-$lines = array();
-// var_dump($vn);
-
+echo "<!DOCTYPE html>\n";
 echo "<html>\n";
 echo " <head>\n";
 echo "  <title>CLLS - Istoric</title>\n";
@@ -285,75 +84,108 @@ echo "  <style>\n";
 echo "   html { height:100%; min-height:100%; width:100%; min-width:100%; }\n";
 echo "   body { font-size:large; }\n";
 echo "   input { font-size:large; }\n";
-echo "   table { border-collapse:collapse; border-style:solid; }\n";
-echo "   th { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
-echo "   td { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
+echo "   table { border-collapse:collapse; border-style:hidden; }\n";
+echo "   th { padding:5px; width:10em; }\n";
+echo "   td { padding:5px; width:10em; }\n";
+// echo "   th { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
+// echo "   td { padding:5px; border-style:solid; border-width:thin; width:10em; }\n";
 echo "  </style>\n";
 echo " </head>\n";
 echo " <body>\n";
+echo $imgmap;
 echo "  <table>\n";
+echo "   <tr><th align='center' colspan='3'>".$day."</th></tr>\n";
+// echo "   <tr><th align='center' style='border-style:hidden;'>".$day."</th></tr>\n";
 echo "   <tr>\n";
-echo "    <th align='center'>Data</th>\n";
-echo "    <td align='center' colspan='8'>".$now_ts."</td>\n";
+echo "    <td align='center' colspan='3'>\n";
+echo "     <img src='".$image_file_name."' usemap='#historymap'>\n";
+echo "    </td>\n";
+echo "   </tr>\n";
+// echo "  </table>\n";
+// echo "  <table>\n";
+echo "   <tr>\n";
+echo "    <td align='center'>\n";
+echo "     <form action='history.php' method='post'>\n";
+echo "      <input type='hidden' name='t_date' value='".$y_day."'>\n";
+echo "      <input type='submit' value='Istoric ziua precedenta'".(($has_y_day === FALSE) ? " disabled": "").">\n";
+echo "     </form>\n";
+echo "    </td>\n";
+echo "    <td align='center'>\n";
+echo "     <form action='info.php' method='get'><input type='submit' value='Inapoi'></form>\n";
+echo "    </td>\n";
+echo "    <td align='center'>\n";
+echo "     <form action='history.php' method='post'>\n";
+echo "      <input type='hidden' name='t_date' value='".$t_mrow."'>\n";
+echo "      <input type='submit' value='Istoric ziua urmatoare'".(($has_t_mrow === FALSE) ? " disabled": "").">\n";
+echo "     </form>\n";
+echo "    </td>\n";
+echo "   </tr>\n";
+// echo "  </table>\n";
+echo "   <tr>\n";
+echo "    <td align='left' colspan='3'></td>\n";
+echo "   </tr>\n";
+$i = $all_index;
+echo "   <tr>\n";
+echo "    <td align='left' colspan='3'>\n";
+echo "     ".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]." (".$room_sum_minutes[$i]." minute)\n";
+echo "    </td>\n";
+echo "   </tr>\n";
+$i = $up_index;
+echo "   <tr>\n";
+echo "    <td align='left' colspan='3'>\n";
+echo "     ".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]." (".$room_sum_minutes[$i]." minute)\n";
+echo "    </td>\n";
+echo "   </tr>\n";
+$i = $down_index;
+echo "   <tr>\n";
+echo "    <td align='left' colspan='3'>\n";
+echo "     ".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]." (".$room_sum_minutes[$i]." minute)\n";
+echo "    </td>\n";
 echo "   </tr>\n";
 echo "   <tr>\n";
-echo "    <td rowspan='2'></td>\n";
-echo "    <td align='center' colspan='8'><b>Temperatura ultimele ".$HOURS." ore</b><br>mediile pe fiecare 10 minute</td>\n";
+echo "    <td align='left' colspan='3'></td>\n";
 echo "   </tr>\n";
-echo "\n";
-echo "   <tr>\n";
-echo "    <th align='center'>Dormitor Luca</th>\n";
-echo "    <th align='center'>Dormitor matrimonial</th>\n";
-echo "    <th align='center'>Dormitor oaspeti</th>\n";
-echo "    <th align='center'>Baie etaj</th>\n";
-echo "    <th align='center'>Bucatarie</th>\n";
-echo "    <th align='center'>Living</th>\n";
-echo "    <th align='center'>Birou</th>\n";
-echo "    <th align='center'>Baie parter</th>\n";
-echo "   </tr>\n";
-for($i = 0; $i <= $SIZE; ++$i)
+for ($i = 0 ; $i < $up_index ; ++ $i)
 {
-  echo "   <tr>\n";  
-  echo "    <td align='center'>".$vn["hm"][$i]."</td>\n";
-
-  $p_zec = $vn["dl"][$i] % 100; $p_int = ($vn["dl"][$i] - $p_zec) / 100;
-  $color = ($vn["dl_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["dm"][$i] % 100; $p_int = ($vn["dm"][$i] - $p_zec) / 100;
-  $color = ($vn["dm_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["d3"][$i] % 100; $p_int = ($vn["d3"][$i] - $p_zec) / 100;
-  $color = ($vn["d3_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["bs"][$i] % 100; $p_int = ($vn["bs"][$i] - $p_zec) / 100;
-  $color = ($vn["bs_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["bu"][$i] % 100; $p_int = ($vn["bu"][$i] - $p_zec) / 100;
-  $color = ($vn["bu_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["li"][$i] % 100; $p_int = ($vn["li"][$i] - $p_zec) / 100;
-  $color = ($vn["li_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["bi"][$i] % 100; $p_int = ($vn["bi"][$i] - $p_zec) / 100;
-  $color = ($vn["bi_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
-  $p_zec = $vn["bj"][$i] % 100; $p_int = ($vn["bj"][$i] - $p_zec) / 100;
-  $color = ($vn["bj_r"][$i] > 0) ? "red" : "blue";
-  echo "    <td align='center'><font color='" . $color . "'>" . $p_int . "."; if($p_zec < 10) echo "0"; echo $p_zec . "</font></td>\n";
-
+  if ($i === $up_index / 2)
+  {
+    echo "   <tr>\n";
+    echo "    <td align='left' colspan='3'></td>\n";
+    echo "   </tr>\n";
+  }
+  echo "   <tr>\n";
+  echo "    <td align='left' colspan='3'>\n";
+  echo "     ".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]." (".$room_sum_minutes[$i]." minute)\n";
+  echo "    </td>\n";
   echo "   </tr>\n";
-echo "\n";
 }
-echo "   <tr><td colspan='9'></td></tr>\n";
-echo "   <tr><td colspan='9' align='center'><form action='info.php' method='get'><input type='submit' value='Inapoi'></form></td></tr>\n";
 echo "  </table>\n";
+// echo "  <br>\n";
+// echo "  <p>".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]."</p>\n";
+// $i = $up_index;
+// echo "  <p>".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]."</p>\n";
+// $i = $down_index;
+// echo "  <p>".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]."</p>\n";
+// echo "  <br>\n";
+// for ($i = 0 ; $i < $up_index ; ++ $i)
+// {
+//   if ($i === $up_index / 2)
+//     echo "  <br>\n";
+//   echo "  <p>".$room[$i].": ".(($room_sum_minutes[$i] > 0) ? "A mers <b>$room_sum_str[$i]</b>; ":"").$room_str[$i]."</p>\n";
+// }
+// echo "  <br>\n";
+
+// show logs
+if($log_count > 0)
+{
+  echo "  <p>Log:</p>\n";
+  echo "  <p>\n";
+  for($i = ($log_count - 1); $i >= 0; --$i)
+  {
+    echo "   ".$log[$i]."<br>\n";
+  }
+  echo "  </p>\n";
+}
 echo " </body>\n";
 echo "</html>\n";
 echo "\n";
