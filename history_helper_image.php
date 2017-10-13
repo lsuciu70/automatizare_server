@@ -200,36 +200,18 @@ $dark_red_color = imagecolorallocate($image, 170, 0, 0);
 $teal_color = imagecolorallocate($image, 0, 128, 128);
 $dark_teal_color = imagecolorallocate($image, 0, 96, 96);
 
-// $yellow_color = imagecolorallocate($image, 255, 255, 0);
-// $fuchsia_color = imagecolorallocate($image, 255, 0, 255);
-// $cyan_color = imagecolorallocate($image, 0, 255, 255);
+$yellow_color = imagecolorallocate($image, 255, 255, 0);
+$fuchsia_color = imagecolorallocate($image, 255, 0, 255);
+$cyan_color = imagecolorallocate($image, 0, 255, 255);
 
-// $purple_color = imagecolorallocate($image, 128, 0, 128);
-// $olive_color = imagecolorallocate($image, 128,128,0);
-
-// $red_color_str = "red";         // 255, 0, 0
-// $green_color_str = "green";     // 0, 255, 0
-// $blue_color_str = "blue";       // 0, 0, 255
-
-// $yellow_color_str = "yellow";   // 255, 255, 0
-// $fuchsia_color_str = "fuchsia"; // 255, 0, 255
-// $cyan_color_str = "cyan";       // 0, 255, 255
-
-// $orange_color_str = "orange";   // 255, 128, 0
-// $purple_color_str = "purple";   // 128, 0, 128
-// $teal_color_str = "teal";       // 0, 128, 128
-// $olive_color_str = "olive";     // 128, 128, 0
-
-// $colors_str = array(
-//     $green_color_str, $orange_color_str, $blue_color_str, $red_color_str,
-//     $teal_color_str, $olive_color_str, $cyan_color_str, $fuchsia_color_str
-// );
+$purple_color = imagecolorallocate($image, 128, 0, 128);
+$olive_color = imagecolorallocate($image, 128,128,0);
 
 $colors_img = array(
-    $green_color, $orange_color, $blue_color, $red_color, 
-    $dark_green_color, $dark_orange_color, $dark_blue_color, $dark_red_color,
+    $green_color, $fuchsia_color, $cyan_color, $red_color,
+    $dark_green_color, $purple_color, $teal_color, $dark_red_color,
 //     $teal_color, $olive_color, $cyan_color, $fuchsia_color,
-    $teal_color, $dark_teal_color, $black_color
+    $yellow_color, $olive_color, $black_color
 );
 
 // make white background
