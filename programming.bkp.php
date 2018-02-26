@@ -37,7 +37,6 @@ header("Expires: 0"); // Proxies.
 // variables
 $room = "unknown";
 $room_name = array("Bucatarie", "Living", "Birou", "Baie parter", "Camera Luca", "Dormitor matrimonial", "Dormitor oaspeti", "Baie etaj");
-$room_short = array("bu", "li", "bi", "bp", "dl", "dm", "do", "be");
 
 // get post data
 $LOC_SUS = "etaj";
@@ -92,7 +91,6 @@ $vn = array(
   "next_programm_p4",
   "target_temperature_p4",
 );
-
 $vn_val = array (
   $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1), // programming
   $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15), // start_hour_p1
@@ -209,74 +207,70 @@ else $prog_str_4 .= "temperatura de la pornire + 0.3 &deg;C";
   <table>
 
    <form action='/programming_save.php' method='post'>
-   <input type='hidden' name='room' value='<?php echo $room_short[$index]; ?>'>
+   <input type='hidden' name='t_loc' value='<?php echo $t_loc; ?>'>
    <!-- room: <?php echo $room; ?> -->
    <tr>
     <td rowspan=5><?php echo $room; ?></td>
-<?php 
-// {"p":4,"ih1":17,"im1":00,"sh1":7,"sm1":00,"tt1":2200,"ih2":3,"im2":30,"np2":3,"ih3":18,"im3":00,"np3":2,"np4":3}
-// {"p":2,"ih1":17,"im1":00,"sh1":7,"sm1":01,"tt1":2200,"ih2":3,"im2":30,"np2":3,"ih3":18,"im3":00,"np3":2,"np4":3}
-// {"p":2,"ih1":17,"im1":00,"sh1":7,"sm1":01,"tt1":2200,"ih2":3,"im2":30,"np2":3,"ih3":18,"im3":00,"np3":2,"np4":3}
-?>
+
    <!-- programm: 0 -->
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='0'<?php if($p === 0) echo " checked"; ?>><?php echo $prog_str_0; ?></label>
+     <label style='padding:5px;'><input type='radio' name='programming_<?php echo $room_idx; ?>' value='0'<?php if($p === 0) echo " checked"; ?>><?php echo $prog_str_0; ?></label>
     </td>
    </tr>
 
    <!-- programm: 1 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='1'<?php if($p === 1) echo " checked"; ?>><?php echo $prog_str_1; ?></label><br>
+     <label style='padding:5px;'><input type='radio' name='programming_<?php echo $room_idx; ?>' value='1'<?php if($p === 1) echo " checked"; ?>><?php echo $prog_str_1; ?></label><br>
      Start
-     <input type='text' style='text-align:center;' name='ih1' maxlength='2' size='1' value='<?php echo $shp1; ?>'>:
-     <input type='text' style='text-align:center;' name='im1' maxlength='2' size='1' value='<?php if($smp1 < 10) echo "0"; echo $smp1; ?>'>
+     <input type='text' style='text-align:center;' name='start_hour_p1_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php echo $shp1; ?>'>:
+     <input type='text' style='text-align:center;' name='start_minute_p1_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php if($smp1 < 10) echo "0"; echo $smp1; ?>'>
      Stop
-     <input type='text' style='text-align:center;' name='sh1' maxlength='2' size='1' value='<?php echo $ehp1; ?>'>:
-     <input type='text' style='text-align:center;' name='sm1' maxlength='2' size='1' value='<?php if($emp1 < 10) echo "0"; echo $emp1; ?>'>
+     <input type='text' style='text-align:center;' name='stop_hour_p1_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php echo $ehp1; ?>'>:
+     <input type='text' style='text-align:center;' name='stop_minute_p1_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php if($emp1 < 10) echo "0"; echo $emp1; ?>'>
      &deg;C
-     <input type='text' style='text-align:center;' name='tt1' maxlength='5' size='1' value='<?php echo $tp1_int."."; if($tp1_zec < 10) echo "0"; echo $tp1_zec; ?>'>
+     <input type='text' style='text-align:center;' name='target_temperature_p1_<?php echo $room_idx; ?>' maxlength='5' size='1' value='<?php echo $tp1_int."."; if($tp1_zec < 10) echo "0"; echo $tp1_zec; ?>'>
     </td>
    </tr>
 
    <!-- programm: 2 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='2'<?php if($p === 2) echo " checked"; ?>><?php echo $prog_str_2; ?></label><br>
+     <label style='padding:5px;'><input type='radio' name='programming_<?php echo $room_idx; ?>' value='2'<?php if($p === 2) echo " checked"; ?>><?php echo $prog_str_2; ?></label><br>
      Start
-     <input type='text' style='text-align:center;' name='ih2' maxlength='2' size='1' value='<?php echo $shp2; ?>'>:
-     <input type='text' style='text-align:center;' name='im2' maxlength='2' size='1' value='<?php if($smp2 < 10) echo "0"; echo $smp2; ?>'>
+     <input type='text' style='text-align:center;' name='start_hour_p2_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php echo $shp2; ?>'>:
+     <input type='text' style='text-align:center;' name='start_minute_p2_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php if($smp2 < 10) echo "0"; echo $smp2; ?>'>
      Urmatorul program: 
-     <label><input type='radio' name='np2' value='0'<?php if($npp2 === 0) echo " checked"; ?>>P0</label>
-     <label><input type='radio' name='np2' value='1'<?php if($npp2 === 1) echo " checked"; ?>>P1</label>
-     <label><input type='radio' name='np2' value='2'<?php if($npp2 === 2) echo " checked"; ?>>P2</label>
-     <label><input type='radio' name='np2' value='3'<?php if($npp2 === 3) echo " checked"; ?>>P3</label>
+     <label><input type='radio' name='next_programm_p2_<?php echo $room_idx; ?>' value='0'<?php if($npp2 === 0) echo " checked"; ?>>P0</label>
+     <label><input type='radio' name='next_programm_p2_<?php echo $room_idx; ?>' value='1'<?php if($npp2 === 1) echo " checked"; ?>>P1</label>
+     <label><input type='radio' name='next_programm_p2_<?php echo $room_idx; ?>' value='2'<?php if($npp2 === 2) echo " checked"; ?>>P2</label>
+     <label><input type='radio' name='next_programm_p2_<?php echo $room_idx; ?>' value='3'<?php if($npp2 === 3) echo " checked"; ?>>P3</label>
     </td>
    </tr>
 
    <!-- programm: 3 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='3'<?php if($p === 3) echo " checked"; ?>><?php echo $prog_str_3; ?></label><br>
-     Start   <input type='text' style='text-align:center;' name='ih3' maxlength='2' size='1' value='<?php echo $shp3; ?>'>:
-     <input type='text' style='text-align:center;' name='im3' maxlength='2' size='1' value='<?php if($smp3 < 10) echo "0"; echo $smp3; ?>'>
+     <label style='padding:5px;'><input type='radio' name='programming_<?php echo $room_idx; ?>' value='3'<?php if($p === 3) echo " checked"; ?>><?php echo $prog_str_3; ?></label><br>
+     Start   <input type='text' style='text-align:center;' name='start_hour_p3_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php echo $shp3; ?>'>:
+     <input type='text' style='text-align:center;' name='start_minute_p3_<?php echo $room_idx; ?>' maxlength='2' size='1' value='<?php if($smp3 < 10) echo "0"; echo $smp3; ?>'>
      Urmatorul program:
-     <label><input type='radio' name='np3' value='0'<?php if($npp3 === 0) echo " checked"; ?>>P0</label>
-     <label><input type='radio' name='np3' value='1'<?php if($npp3 === 1) echo " checked"; ?>>P1</label>
-     <label><input type='radio' name='np3' value='2'<?php if($npp3 === 2) echo " checked"; ?>>P2</label>
-     <label><input type='radio' name='np3' value='3'<?php if($npp3 === 3) echo " checked"; ?>>P3</label>
+     <label><input type='radio' name='next_programm_p3_<?php echo $room_idx; ?>' value='0'<?php if($npp3 === 0) echo " checked"; ?>>P0</label>
+     <label><input type='radio' name='next_programm_p3_<?php echo $room_idx; ?>' value='1'<?php if($npp3 === 1) echo " checked"; ?>>P1</label>
+     <label><input type='radio' name='next_programm_p3_<?php echo $room_idx; ?>' value='2'<?php if($npp3 === 2) echo " checked"; ?>>P2</label>
+     <label><input type='radio' name='next_programm_p3_<?php echo $room_idx; ?>' value='3'<?php if($npp3 === 3) echo " checked"; ?>>P3</label>
     </td>
    </tr>
 
    <!-- programm: 4 -->
    <tr>
     <td>
-     <label style='padding:5px;'><input type='radio' name='p' value='4'<?php if($p === 4) echo " checked"; ?>><?php echo $prog_str_4; ?></label><br>
+     <label style='padding:5px;'><input type='radio' name='programming_<?php echo $room_idx; ?>' value='4'<?php if($p === 4) echo " checked"; ?>><?php echo $prog_str_4; ?></label><br>
      Urmatorul program:
-     <label><input type='radio' name='np4' value='0'<?php if($npp4 === 0) echo " checked"; ?>>P0</label>
-     <label><input type='radio' name='np4' value='1'<?php if($npp4 === 1) echo " checked"; ?>>P1</label>
-     <label><input type='radio' name='np4' value='2'<?php if($npp4 === 2) echo " checked"; ?>>P2</label>
-     <label><input type='radio' name='np4' value='3'<?php if($npp4 === 3) echo " checked"; ?>>P3</label>
+     <label><input type='radio' name='next_programm_p4_<?php echo $room_idx; ?>' value='0'<?php if($npp4 === 0) echo " checked"; ?>>P0</label>
+     <label><input type='radio' name='next_programm_p4_<?php echo $room_idx; ?>' value='1'<?php if($npp4 === 1) echo " checked"; ?>>P1</label>
+     <label><input type='radio' name='next_programm_p4_<?php echo $room_idx; ?>' value='2'<?php if($npp4 === 2) echo " checked"; ?>>P2</label>
+     <label><input type='radio' name='next_programm_p4_<?php echo $room_idx; ?>' value='3'<?php if($npp4 === 3) echo " checked"; ?>>P3</label>
     </td>
    </tr>
 

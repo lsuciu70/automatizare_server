@@ -118,13 +118,25 @@ if (is_file($temp_file))
   }
 }
 // get POST values
-$t_t0=htmlspecialchars($_POST["t_0"]);
+$tt_t0=htmlspecialchars($_POST["t_0"]);
+if ($tt_t0 > 0) {
+    $t_t0=$tt_t0;
+}
 $t_t0_r=htmlspecialchars($_POST["t_0_r"]);
-$t_t1=htmlspecialchars($_POST["t_1"]);
+$tt_t1=htmlspecialchars($_POST["t_1"]);
+if ($tt_t1 > 0) {
+    $t_t1=$tt_t1;
+}
 $t_t1_r=htmlspecialchars($_POST["t_1_r"]);
-$t_t2=htmlspecialchars($_POST["t_2"]);
+$tt_t2=htmlspecialchars($_POST["t_2"]);
+if ($tt_t2 > 0) {
+    $t_t2=$tt_t2;
+}
 $t_t2_r=htmlspecialchars($_POST["t_2_r"]);
-$t_t3=htmlspecialchars($_POST["t_3"]);
+$tt_t3=htmlspecialchars($_POST["t_3"]);
+if ($tt_t3 > 0) {
+    $t_t3=$tt_t3;
+}
 $t_t3_r=htmlspecialchars($_POST["t_3_r"]);
 
 // write to temperature file
@@ -132,8 +144,16 @@ $line = "" . $t_t0 . "," . $t_t0_r . "," . $t_t1 . "," . $t_t1_r . "," . $t_t2 .
 file_put_contents($temp_file, $line, LOCK_EX);
 
 // write to sum file
-$s_t0 += $t_t0; $s_t1 += $t_t1; $s_t2 += $t_t2; $s_t3 += $t_t3; $s_jos += 1;
-$s_t0_r += $t_t0_r; $s_t1_r += $t_t1_r; $s_t2_r += $t_t2_r; $s_t3_r += $t_t3_r;
+$s_t0 += $t_t0;
+$s_t0_r += $t_t0_r;
+$s_t1 += $t_t1;
+$s_t1_r += $t_t1_r;
+$s_t2 += $t_t2;
+$s_t2_r += $t_t2_r;
+$s_t3 += $t_t3; 
+$s_t3_r += $t_t3_r;
+$s_jos += 1;
+
 $line = "" . $s_t0 . "," . $s_t0_r . "," . $s_t1 . "," . $s_t1_r . "," . $s_t2 . "," . $s_t2_r . "," . $s_t3 . "," . $s_t3_r . "," . $s_jos . PHP_EOL;
 file_put_contents($sum_file, $line, LOCK_EX);
 

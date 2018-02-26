@@ -16,15 +16,22 @@ $jos_temp_file_name = "data/jos_temp.txt";
 $sus_temp_file_name = "data/sus_temp.txt";
 $is_jos = is_file($jos_temp_file_name);
 $is_sus = is_file($sus_temp_file_name);
+$jos_ts = "-";
+$sus_ts = "-";
+$now_dm = (60 * $ts_h) + $ts_m;
+$jos_dm = 0;
+$sus_dm = 0;
 if($is_jos)
 {
   $jos_temp = file_get_contents($jos_temp_file_name);
   sscanf($jos_temp, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_bu, $t_bu_r, $t_li, $t_li_r, $t_bi, $t_bi_r, $t_bj, $t_bj_r, $jos_ts);
   sscanf($jos_ts, "%d.%d.%d_%d:%d:%d", $ts_fY, $ts_fM, $ts_fD, $ts_fh, $ts_fm, $ts_fs);
-  if(abs($ts_fm - $ts_m) > 1)
-  {
-    $t_bu = 0; $t_bu_r = 0; $t_li = 0; $t_li_r = 0; $t_bi = 0; $t_bi_r = 0; $t_bj = 0; $t_bj_r = 0;
-  }
+  $jos_ts = sprintf("%02d-%02d-%d %02d:%02d:%02d", $ts_fD, $ts_fM, $ts_fY, $ts_fh, $ts_fm, $ts_fs);
+  $jos_dm = (60 * $ts_fh) + $ts_fm;
+//   if(abs($ts_fm - $ts_m) > 1)
+//   {
+//     $t_bu = 0; $t_bu_r = 0; $t_li = 0; $t_li_r = 0; $t_bi = 0; $t_bi_r = 0; $t_bj = 0; $t_bj_r = 0;
+//   }
 }
 else
 {
@@ -35,10 +42,12 @@ if($is_sus)
   $sus_temp = file_get_contents($sus_temp_file_name);
   sscanf($sus_temp, "%d,%d,%d,%d,%d,%d,%d,%d,%s", $t_dl, $t_dl_r, $t_dm, $t_dm_r, $t_d3, $t_d3_r, $t_bs, $t_bs_r, $sus_ts);
   sscanf($sus_ts, "%d.%d.%d_%d:%d:%d", $ts_fY, $ts_fM, $ts_fD, $ts_fh, $ts_fm, $ts_fs);
-  if(abs($ts_fm - $ts_m) > 1)
-  {
-    $t_dl = 0; $t_dl_r = 0; $t_dm = 0; $t_dm_r = 0; $t_d3 = 0; $t_d3_r = 0; $t_bs = 0; $t_bs_r = 0;
-  }
+  $sus_dm = (60 * $ts_fh) + $ts_fm;
+  $sus_ts = sprintf("%02d-%02d-%d %02d:%02d:%02d", $ts_fD, $ts_fM, $ts_fY, $ts_fh, $ts_fm, $ts_fs);
+  //   if(abs($ts_fm - $ts_m) > 1)
+//   {
+//     $t_dl = 0; $t_dl_r = 0; $t_dm = 0; $t_dm_r = 0; $t_d3 = 0; $t_d3_r = 0; $t_bs = 0; $t_bs_r = 0;
+//   }
 }
 else
 {
@@ -224,7 +233,7 @@ if($is_sus)
   echo "   <tr>\n";
   echo "    <th align='center'>Etaj</th>\n";
   echo "    <td align='center'><form action='history.php' method='post'><input type='submit' value='Istoric'></form></td>\n";
-  echo "    <td align='left' colspan='3'></td>\n";
+  echo "    <td align='left' colspan='3'>"; if(($now_dm - $sus_dm) >= 5) echo "<font color='red'>Ultima actualizare: ".$sus_ts."</font>"; else  echo "Ultima actualizare: ".$sus_ts;  echo "</td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
@@ -295,7 +304,7 @@ if($is_jos)
   echo "   <tr>\n";
   echo "    <th align='center'>Parter</th>\n";
   echo "    <td align='center'><form action='history.php' method='post'><input type='submit' value='Istoric'></form></td>\n";
-  echo "    <td align='left' colspan='3'></td>\n";
+  echo "    <td align='left' colspan='3'>"; if(($now_dm - $jos_dm) >= 5) echo "<font color='red'>Ultima actualizare: ".$jos_ts."</font>"; else  echo "Ultima actualizare: ".$jos_ts;  echo "</td>\n";
   echo "   </tr>\n";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "\n";
