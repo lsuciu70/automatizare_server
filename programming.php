@@ -258,7 +258,7 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
    <input type='hidden' name='room' value='<?php echo $room_short[$index]; ?>'>
    <!-- room: <?php echo $room; ?> -->
    <tr>
-    <td rowspan=5><?php echo $room; ?></td>
+    <td rowspan=7><?php echo $room; ?></td>
 <?php 
 // {"p":4,"ih1":17,"im1":00,"sh1":7,"sm1":00,"tt1":2200,"ih2":3,"im2":30,"np2":3,"ih3":18,"im3":00,"np3":2,"np4":3}
 // {"p":2,"ih1":17,"im1":00,"sh1":7,"sm1":01,"tt1":2200,"ih2":3,"im2":30,"np2":3,"ih3":18,"im3":00,"np3":2,"np4":3}
@@ -273,8 +273,8 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
    <!-- programm: 1 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='1'<?php if($p === 1) echo " checked"; ?>><?php echo $prog_str_1; ?></label><br>
-     Start
+     <label style='padding:5px;'><input type='radio' name='p' value='1'<?php if($p === 1) echo " checked"; ?>><?php echo $prog_str_1; ?></label>
+     <br>Start
      <input type='text' style='text-align:center;' name='ih1' maxlength='2' size='1' value='<?php echo $shp1; ?>'>:
      <input type='text' style='text-align:center;' name='im1' maxlength='2' size='1' value='<?php if($smp1 < 10) echo "0"; echo $smp1; ?>'>
      Stop
@@ -288,61 +288,61 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
    <!-- programm: 2 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='2'<?php if($p === 2) echo " checked"; ?>><?php echo $prog_str_2; ?></label><br>
-     Start
+     <label style='padding:5px;'><input type='radio' name='p' value='2'<?php if($p === 2) echo " checked"; ?>><?php echo $prog_str_2; ?></label>
+     <br>Start
      <input type='text' style='text-align:center;' name='ih2' maxlength='2' size='1' value='<?php echo $shp2; ?>'>:
      <input type='text' style='text-align:center;' name='im2' maxlength='2' size='1' value='<?php if($smp2 < 10) echo "0"; echo $smp2; ?>'>
-     Urmatorul program: 
+     <br>Urmatorul program: 
      <label><input type='radio' name='np2' value='0'<?php if($npp2 === 0) echo " checked"; ?>>P0</label>
      <label><input type='radio' name='np2' value='1'<?php if($npp2 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np2' value='2'<?php if($npp2 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np2' value='3'<?php if($npp2 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np2' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np2' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
+     <label><input type='radio' name='np2' value='5'<?php if($npp2 === 5) echo " checked"; ?>>P5</label>
+     <label><input type='radio' name='np2' value='6'<?php if($npp2 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
    <!-- programm: 3 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='3'<?php if($p === 3) echo " checked"; ?>><?php echo $prog_str_3; ?></label><br>
-     Start   <input type='text' style='text-align:center;' name='ih3' maxlength='2' size='1' value='<?php echo $shp3; ?>'>:
+     <label style='padding:5px;'><input type='radio' name='p' value='3'<?php if($p === 3) echo " checked"; ?>><?php echo $prog_str_3; ?></label>
+     <br>Start   <input type='text' style='text-align:center;' name='ih3' maxlength='2' size='1' value='<?php echo $shp3; ?>'>:
      <input type='text' style='text-align:center;' name='im3' maxlength='2' size='1' value='<?php if($smp3 < 10) echo "0"; echo $smp3; ?>'>
-     Urmatorul program:
+     <br>Urmatorul program:
      <label><input type='radio' name='np3' value='0'<?php if($npp3 === 0) echo " checked"; ?>>P0</label>
      <label><input type='radio' name='np3' value='1'<?php if($npp3 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np3' value='2'<?php if($npp3 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np3' value='3'<?php if($npp3 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np3' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np3' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
+     <label><input type='radio' name='np3' value='5'<?php if($npp3 === 5) echo " checked"; ?>>P5</label>
+     <label><input type='radio' name='np3' value='6'<?php if($npp3 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
    <!-- programm: 4 -->
    <tr>
     <td>
-     <label style='padding:5px;'><input type='radio' name='p' value='4'<?php if($p === 4) echo " checked"; ?>><?php echo $prog_str_4; ?></label><br>
-     Urmatorul program:
+     <label style='padding:5px;'><input type='radio' name='p' value='4'<?php if($p === 4) echo " checked"; ?>><?php echo $prog_str_4; ?></label>
+     <br>Urmatorul program:
      <label><input type='radio' name='np4' value='0'<?php if($npp4 === 0) echo " checked"; ?>>P0</label>
      <label><input type='radio' name='np4' value='1'<?php if($npp4 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np4' value='2'<?php if($npp4 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np4' value='3'<?php if($npp4 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np4' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np4' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
+     <label><input type='radio' name='np4' value='5'<?php if($npp4 === 5) echo " checked"; ?>>P5</label>
+     <label><input type='radio' name='np4' value='6'<?php if($npp4 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
    <!-- programm: 5 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='5'<?php if($p === 5) echo " checked"; ?>><?php echo $prog_str_5; ?></label><br>
-     Start
+     <label style='padding:5px;'><input type='radio' name='p' value='5'<?php if($p === 5) echo " checked"; ?>><?php echo $prog_str_5; ?></label>
+     <br>Start
      <input type='text' style='text-align:center;' name='ih5' maxlength='2' size='1' value='<?php echo $shp5; ?>'>:
      <input type='text' style='text-align:center;' name='im5' maxlength='2' size='1' value='<?php if($smp5 < 10) echo "0"; echo $smp5; ?>'>
      Stop
      <input type='text' style='text-align:center;' name='sh5' maxlength='2' size='1' value='<?php echo $ehp5; ?>'>:
      <input type='text' style='text-align:center;' name='sm5' maxlength='2' size='1' value='<?php if($emp5 < 10) echo "0"; echo $emp5; ?>'>
-     Urmatorul program:
+     <br>Urmatorul program:
      <label><input type='radio' name='np5' value='0'<?php if($npp5 === 0) echo " checked"; ?>>P0</label>
      <label><input type='radio' name='np5' value='1'<?php if($npp5 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np5' value='2'<?php if($npp5 === 2) echo " checked"; ?>>P2</label>
@@ -355,14 +355,14 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
    <!-- programm: 6 -->
    <tr>
     <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='6'<?php if($p === 6) echo " checked"; ?>><?php echo $prog_str_6; ?></label><br>
-     Start
+     <label style='padding:5px;'><input type='radio' name='p' value='6'<?php if($p === 6) echo " checked"; ?>><?php echo $prog_str_6; ?></label>
+     <br>Start
      <input type='text' style='text-align:center;' name='ih6' maxlength='2' size='1' value='<?php echo $shp6; ?>'>:
      <input type='text' style='text-align:center;' name='im6' maxlength='2' size='1' value='<?php if($smp6 < 10) echo "0"; echo $smp6; ?>'>
      Stop
      <input type='text' style='text-align:center;' name='sh6' maxlength='2' size='1' value='<?php echo $ehp6; ?>'>:
      <input type='text' style='text-align:center;' name='sm6' maxlength='2' size='1' value='<?php if($emp6 < 10) echo "0"; echo $emp6; ?>'>
-     Urmatorul program:
+     <br>Urmatorul program:
      <label><input type='radio' name='np6' value='0'<?php if($npp6 === 0) echo " checked"; ?>>P0</label>
      <label><input type='radio' name='np6' value='1'<?php if($npp6 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np6' value='2'<?php if($npp6 === 2) echo " checked"; ?>>P2</label>

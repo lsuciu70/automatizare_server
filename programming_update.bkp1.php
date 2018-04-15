@@ -49,17 +49,7 @@ $vn = array (
   "next_programm_p3",
   "target_temperature_p3",
   "next_programm_p4",
-  "target_temperature_p4",
-    "start_hour_p5",
-    "start_minute_p5",
-    "stop_hour_p5",
-    "stop_minute_p5",
-    "next_programm_p5",
-    "start_hour_p6",
-    "start_minute_p6",
-    "stop_hour_p6",
-    "stop_minute_p6",
-    "next_programm_p6",
+  "target_temperature_p4"
 );
 $vn_cnt = count ( $vn );
 $vn_val = array (
@@ -79,16 +69,6 @@ $vn_val = array (
   $vn[13] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p3
   $vn[14] => array(0, 0, 0, 0, 0, 0, 0, 0), // next_programm_p4
   $vn[15] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p4
-    $vn[16] => array(5, 5, 5, 5, 5, 5, 5, 5), // start_hour_p5
-    $vn[17] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p5
-    $vn[18] => array(5, 5, 5, 5, 5, 5, 5, 5), // stop_hour_p5
-    $vn[19] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p5
-    $vn[20] => array(6, 6, 6, 6, 6, 6, 6, 6), // next_programm_p5
-    $vn[21] => array(19, 19, 19, 19, 19, 19, 19, 19), // start_hour_p6
-    $vn[22] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p6
-    $vn[23] => array(19, 19, 19, 19, 19, 19, 19, 19), // stop_hour_p6
-    $vn[24] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p6
-    $vn[25] => array(5, 5, 5, 5, 5, 5, 5, 5), // next_programm_p6
 );
 
 for($x = 0; $x < $vn_cnt; $x ++)
