@@ -71,18 +71,7 @@ $vn = array(
   "target_temperature_p3",                                                      
   "next_programm_p4",                                                           
   "target_temperature_p4",                                                      
-    "start_hour_p5",
-    "start_minute_p5",
-    "stop_hour_p5",
-    "stop_minute_p5",
-    "next_programm_p5",
-    "start_hour_p6",
-    "start_minute_p6",
-    "stop_hour_p6",
-    "stop_minute_p6",
-    "next_programm_p6",
-);              
-
+);                                                                              
 $vn_val = array (
   $vn[0] => array(1, 1, 1, 1, 1, 1, 1, 1), // programming
   $vn[1] => array(15, 15, 15, 15, 15, 15, 15, 15), // start_hour_p1
@@ -100,16 +89,6 @@ $vn_val = array (
   $vn[13] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p3
   $vn[14] => array(0, 0, 0, 0, 0, 0, 0, 0), // next_programm_p4
   $vn[15] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p4
-    $vn[16] => array(5, 5, 5, 5, 5, 5, 5, 5), // start_hour_p5
-    $vn[17] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p5
-    $vn[18] => array(5, 5, 5, 5, 5, 5, 5, 5), // stop_hour_p5
-    $vn[19] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p5
-    $vn[20] => array(6, 6, 6, 6, 6, 6, 6, 6), // next_programm_p5
-    $vn[21] => array(19, 19, 19, 19, 19, 19, 19, 19), // start_hour_p6
-    $vn[22] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p6
-    $vn[23] => array(19, 19, 19, 19, 19, 19, 19, 19), // stop_hour_p6
-    $vn[24] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p6
-    $vn[25] => array(5, 5, 5, 5, 5, 5, 5, 5), // next_programm_p6
 );
 $vn_cnt = count($vn);
 for ($x = 0 ; $x < $vn_cnt ; $x++ )
@@ -137,10 +116,21 @@ for ($i = 0 ; $i < 8 ; $i++)
     $ehp1 = $vn_val["stop_hour_p1"][$i];
     $emp1 = $vn_val["stop_minute_p1"][$i];
     $tp1 = $vn_val["target_temperature_p1"][$i];
+//     $tp1_zec = $tp1 % 100;
+//     $tp1_int = intval(($tp1 - $tp1_zec) / 100);
     $prog_str[$i] = "P1 - merge intre ".sprintf ( "%d:%02d", $shp1, $smp1)." si ".sprintf ( "%d:%02d", $ehp1, $emp1);
     if($shp1 > $ehp1 || ($shp1 === $ehp1 && $smp1 >= $emp1))
       $prog_str[$i] .= " (ziua urmatoare)";
     $prog_str[$i] .= " si face ".centi_to_string($tp1)." &deg;C";
+//     $prog_str[$i] = "P1 - merge intre ".$shp1.":";
+//     if($smp1 < 10) $prog_str[$i] .= "0";
+//     $prog_str[$i] .= $smp1." si ".$ehp1.":";
+//     if($emp1 < 10) $prog_str[$i] .= "0";
+//     $prog_str[$i] .= $emp1;
+//     if($shp1 > $ehp1 || ($shp1 === $ehp1 && $smp1 >= $emp1)) $prog_str[$i] .= " (ziua urmatoare)";
+//     $prog_str[$i] .= " si face ".$tp1_int.".";
+//     if($tp1_zec < 10) $prog_str[$i] .= "0";
+//     $prog_str[$i] .= $tp1_zec." &deg;C";
     break;
   case 2:
     $shp2 = $vn_val["start_hour_p2"][$i];
@@ -189,24 +179,6 @@ for ($i = 0 ; $i < 8 ; $i++)
     }
     else $prog_str[$i] .= " si face temperatura de la pornire + 0.3 &deg;C";
     break;
-  case 5:
-      $shp5 = $vn_val["start_hour_p5"][$i];
-      $smp5 = $vn_val["start_minute_p5"][$i];
-      $ehp5 = $vn_val["stop_hour_p5"][$i];
-      $emp5 = $vn_val["stop_minute_p5"][$i];
-      $prog_str[$i] = "P5 - merge intre ".sprintf ( "%d:%02d", $shp5, $smp5)." si ".sprintf ( "%d:%02d", $ehp5, $emp5);
-      if($shp5 > $ehp5 || ($shp5 === $ehp5 && $smp5 >= $emp5))
-        $prog_str[$i] .= " (ziua urmatoare)";
-      break;
-  case 6:
-      $shp6 = $vn_val["start_hour_p6"][$i];
-      $smp6 = $vn_val["start_minute_p6"][$i];
-      $ehp6 = $vn_val["stop_hour_p6"][$i];
-      $emp6 = $vn_val["stop_minute_p6"][$i];
-      $prog_str[$i] = "P6 - merge intre ".sprintf ( "%d:%02d", $shp6, $smp6)." si ".sprintf ( "%d:%02d", $ehp6, $emp6);
-      if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6))
-        $prog_str[$i] .= " (ziua urmatoare)";
-      break;
   default:
     $prog_str[$i] = "Program necunoscut: ".$p;
     break;

@@ -91,16 +91,6 @@ $vn = array(
   "target_temperature_p3",
   "next_programm_p4",
   "target_temperature_p4",
-    "start_hour_p5",
-    "start_minute_p5",
-    "stop_hour_p5",
-    "stop_minute_p5",
-    "next_programm_p5",
-    "start_hour_p6",
-    "start_minute_p6",
-    "stop_hour_p6",
-    "stop_minute_p6",
-    "next_programm_p6",
 );
 
 $vn_val = array (
@@ -120,16 +110,6 @@ $vn_val = array (
   $vn[13] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p3
   $vn[14] => array(0, 0, 0, 0, 0, 0, 0, 0), // next_programm_p4
   $vn[15] => array(0, 0, 0, 0, 0, 0, 0, 0), // target_temperature_p4
-    $vn[16] => array(5, 5, 5, 5, 5, 5, 5, 5), // start_hour_p5
-    $vn[17] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p5
-    $vn[18] => array(5, 5, 5, 5, 5, 5, 5, 5), // stop_hour_p5
-    $vn[19] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p5
-    $vn[20] => array(6, 6, 6, 6, 6, 6, 6, 6), // next_programm_p5
-    $vn[21] => array(19, 19, 19, 19, 19, 19, 19, 19), // start_hour_p6
-    $vn[22] => array(0, 0, 0, 0, 0, 0, 0, 0), // start_minute_p6
-    $vn[23] => array(19, 19, 19, 19, 19, 19, 19, 19), // stop_hour_p6
-    $vn[24] => array(59, 59, 59, 59, 59, 59, 59, 59), // stop_minute_p6
-    $vn[25] => array(5, 5, 5, 5, 5, 5, 5, 5), // next_programm_p6
 );
 $vn_cnt = count($vn);
 for ($x = 0 ; $x < $vn_cnt ; $x++ )
@@ -166,18 +146,6 @@ $npp4 = $vn_val["next_programm_p4"][$index];
 $tp4 = $vn_val["target_temperature_p4"][$index];
 $tp4_zec = $tp4 % 100;
 $tp4_int = intval(($tp4 - $tp4_zec) / 100);
-
-$shp5 = $vn_val["start_hour_p5"][$index];
-$smp5 = $vn_val["start_minute_p5"][$index];
-$ehp5 = $vn_val["stop_hour_p5"][$index];
-$emp5 = $vn_val["stop_minute_p5"][$index];
-$npp5 = $vn_val["next_programm_p5"][$index];
-
-$shp6 = $vn_val["start_hour_p6"][$index];
-$smp6 = $vn_val["start_minute_p6"][$index];
-$ehp6 = $vn_val["stop_hour_p6"][$index];
-$emp6 = $vn_val["stop_minute_p6"][$index];
-$npp6 = $vn_val["next_programm_p6"][$index];
 
 $prog_str_0 = "P0 - oprit";
 
@@ -224,20 +192,6 @@ if($tp4 !== 0)
   $prog_str_4 .= $tp4_zec." &deg;C";
 }
 else $prog_str_4 .= "temperatura de la pornire + 0.3 &deg;C";
-
-$prog_str_5 = "P5 - merge intre ".$shp5.":";
-if($smp5 < 50) $prog_str_5 .= "0";
-$prog_str_5 .= $smp5." si ".$ehp5.":";
-if($emp5 < 50) $prog_str_5 .= "0";
-$prog_str_5 .= $emp5;
-if($shp5 > $ehp5 || ($shp5 === $ehp5 && $smp5 >= $emp5)) $prog_str_5 .= " (ziua urmatoare)";
-
-$prog_str_6 = "P6 - merge intre ".$shp6.":";
-if($smp6 < 60) $prog_str_6 .= "0";
-$prog_str_6 .= $smp6." si ".$ehp6.":";
-if($emp6 < 60) $prog_str_6 .= "0";
-$prog_str_6 .= $emp6;
-if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua urmatoare)";
 ?>
 <!DOCTYPE html>
 <html>
@@ -297,8 +251,6 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
      <label><input type='radio' name='np2' value='1'<?php if($npp2 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np2' value='2'<?php if($npp2 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np2' value='3'<?php if($npp2 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np2' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np2' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
@@ -313,8 +265,6 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
      <label><input type='radio' name='np3' value='1'<?php if($npp3 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np3' value='2'<?php if($npp3 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np3' value='3'<?php if($npp3 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np3' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np3' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
@@ -327,48 +277,6 @@ if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua 
      <label><input type='radio' name='np4' value='1'<?php if($npp4 === 1) echo " checked"; ?>>P1</label>
      <label><input type='radio' name='np4' value='2'<?php if($npp4 === 2) echo " checked"; ?>>P2</label>
      <label><input type='radio' name='np4' value='3'<?php if($npp4 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np4' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np4' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
-    </td>
-   </tr>
-
-   <!-- programm: 5 -->
-   <tr>
-    <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='5'<?php if($p === 5) echo " checked"; ?>><?php echo $prog_str_5; ?></label><br>
-     Start
-     <input type='text' style='text-align:center;' name='ih5' maxlength='2' size='1' value='<?php echo $shp5; ?>'>:
-     <input type='text' style='text-align:center;' name='im5' maxlength='2' size='1' value='<?php if($smp5 < 10) echo "0"; echo $smp5; ?>'>
-     Stop
-     <input type='text' style='text-align:center;' name='sh5' maxlength='2' size='1' value='<?php echo $ehp5; ?>'>:
-     <input type='text' style='text-align:center;' name='sm5' maxlength='2' size='1' value='<?php if($emp5 < 10) echo "0"; echo $emp5; ?>'>
-     Urmatorul program:
-     <label><input type='radio' name='np5' value='0'<?php if($npp5 === 0) echo " checked"; ?>>P0</label>
-     <label><input type='radio' name='np5' value='1'<?php if($npp5 === 1) echo " checked"; ?>>P1</label>
-     <label><input type='radio' name='np5' value='2'<?php if($npp5 === 2) echo " checked"; ?>>P2</label>
-     <label><input type='radio' name='np5' value='3'<?php if($npp5 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np5' value='5'<?php if($npp5 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np5' value='6'<?php if($npp5 === 6) echo " checked"; ?>>P6</label>
-    </td>
-   </tr>
-
-   <!-- programm: 6 -->
-   <tr>
-    <td align='left'>
-     <label style='padding:5px;'><input type='radio' name='p' value='6'<?php if($p === 6) echo " checked"; ?>><?php echo $prog_str_6; ?></label><br>
-     Start
-     <input type='text' style='text-align:center;' name='ih6' maxlength='2' size='1' value='<?php echo $shp6; ?>'>:
-     <input type='text' style='text-align:center;' name='im6' maxlength='2' size='1' value='<?php if($smp6 < 10) echo "0"; echo $smp6; ?>'>
-     Stop
-     <input type='text' style='text-align:center;' name='sh6' maxlength='2' size='1' value='<?php echo $ehp6; ?>'>:
-     <input type='text' style='text-align:center;' name='sm6' maxlength='2' size='1' value='<?php if($emp6 < 10) echo "0"; echo $emp6; ?>'>
-     Urmatorul program:
-     <label><input type='radio' name='np6' value='0'<?php if($npp6 === 0) echo " checked"; ?>>P0</label>
-     <label><input type='radio' name='np6' value='1'<?php if($npp6 === 1) echo " checked"; ?>>P1</label>
-     <label><input type='radio' name='np6' value='2'<?php if($npp6 === 2) echo " checked"; ?>>P2</label>
-     <label><input type='radio' name='np6' value='3'<?php if($npp6 === 3) echo " checked"; ?>>P3</label>
-     <label><input type='radio' name='np6' value='5'<?php if($npp6 === 5) echo " checked"; ?>>P5</label>
-     <label><input type='radio' name='np6' value='6'<?php if($npp6 === 6) echo " checked"; ?>>P6</label>
     </td>
    </tr>
 
