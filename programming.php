@@ -226,16 +226,16 @@ if($tp4 !== 0)
 else $prog_str_4 .= "temperatura de la pornire + 0.3 &deg;C";
 
 $prog_str_5 = "P5 - merge intre ".$shp5.":";
-if($smp5 < 50) $prog_str_5 .= "0";
+if($smp5 < 10) $prog_str_5 .= "0";
 $prog_str_5 .= $smp5." si ".$ehp5.":";
-if($emp5 < 50) $prog_str_5 .= "0";
+if($emp5 < 10) $prog_str_5 .= "0";
 $prog_str_5 .= $emp5;
 if($shp5 > $ehp5 || ($shp5 === $ehp5 && $smp5 >= $emp5)) $prog_str_5 .= " (ziua urmatoare)";
 
 $prog_str_6 = "P6 - merge intre ".$shp6.":";
-if($smp6 < 60) $prog_str_6 .= "0";
+if($smp6 < 10) $prog_str_6 .= "0";
 $prog_str_6 .= $smp6." si ".$ehp6.":";
-if($emp6 < 60) $prog_str_6 .= "0";
+if($emp6 < 10) $prog_str_6 .= "0";
 $prog_str_6 .= $emp6;
 if($shp6 > $ehp6 || ($shp6 === $ehp6 && $smp6 >= $emp6)) $prog_str_6 .= " (ziua urmatoare)";
 ?>
