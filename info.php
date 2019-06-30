@@ -6,6 +6,7 @@ $url1=$_SERVER['REQUEST_URI'];
 header("Refresh: 10; URL=$url1");
 
 // current date and time
+$ts_Y = 0; $ts_M = 0; $ts_D = 0; $ts_h = 0; $ts_m = 0; $ts_s = 0;
 $now_ts = strftime("%d-%m-%Y %H:%M:%S");
 $ts_full = strftime("%Y.%m.%d_%H:%M:%S");
 sscanf($ts_full, "%d.%d.%d_%d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
@@ -21,6 +22,11 @@ $sus_ts = "-";
 $now_dm = (60 * $ts_h) + $ts_m;
 $jos_dm = 0;
 $sus_dm = 0;
+
+$t_bu = 0; $t_bu_r = 0; $t_li = 0; $t_li_r = 0; $t_bi = 0; $t_bi_r = 0; $t_bj = 0; $t_bj_r = 0;
+$t_dl = 0; $t_dl_r = 0; $t_dm = 0; $t_dm_r = 0; $t_d3 = 0; $t_d3_r = 0; $t_bs = 0; $t_bs_r = 0;
+$ts_fY = 0; $ts_fM = 0; $ts_fD = 0; $ts_fh = 0; $ts_fm = 0; $ts_fs = 0;
+$ts_fD = 0; $ts_fM = 0; $ts_fY = 0; $ts_fh = 0; $ts_fm = 0; $ts_fs = 0;
 if($is_jos)
 {
   $jos_temp = file_get_contents($jos_temp_file_name);
@@ -228,6 +234,7 @@ if($is_log_file)
   }
 }
 
+
 echo "<!DOCTYPE html>\n";
 echo "<html>\n";
 echo " <head>\n";
@@ -256,7 +263,7 @@ echo "   </tr>\n";
 
 if($is_sus)
 {
-  $t_loc = "etaj";
+  //$t_loc = "etaj";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th align='center'>Etaj</th>\n";
@@ -327,7 +334,7 @@ if($is_sus)
 }
 if($is_jos)
 {
-  $t_loc = "parter";
+  //$t_loc = "parter";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th align='center'>Parter</th>\n";
