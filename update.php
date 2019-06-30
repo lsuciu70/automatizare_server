@@ -53,6 +53,7 @@ else
 }
 
 // get current date and time
+$ts_Y = 0; $ts_M = 0; $ts_D = 0; $ts_h = 0; $ts_m = 0; $ts_s = 0;
 $ts_full = strftime("%Y.%m.%d_%H:%M:%S");
 sscanf($ts_full, "%d.%d.%d_%d:%d:%d", $ts_Y, $ts_M, $ts_D, $ts_h, $ts_m, $ts_s);
 
@@ -65,6 +66,8 @@ if (is_file($sum_file))
   sscanf($jos_sum, "%d,%d,%d,%d,%d,%d,%d,%d,%d", $s_t0, $s_t0_r, $s_t1, $s_t1_r, $s_t2, $s_t2_r, $s_t3, $s_t3_r, $s_jos);
 }
 
+$ts_pY = 0; $ts_pM = 0; $ts_pD = 0; $ts_ph = 0; $ts_pm = 0; $ts_ps = 0;
+$t_t0 = 0; $t_t0_r = 0; $t_t1 = 0; $t_t1_r = 0; $t_t2 = 0; $t_t2_r = 0; $t_t3 = 0; $t_t3_r = 0; $ts_jos = 0;
 // read previous temperatures
 if (is_file($temp_file))
 {
@@ -188,7 +191,7 @@ if($is_dbox)
       '--header "Dropbox-API-Arg: {\"path\": \"/'.$dbox_file.'\", \"mode\": \"overwrite\"}" '.
       '--header "Content-Type: application/octet-stream" '.
       '--data-binary @'.$temp_day_file;
-  
+  $retval = "";
   if(system($curl_cmd." &", $retval) === FALSE)
     error_log($retval);
 }
