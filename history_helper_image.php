@@ -109,6 +109,8 @@ if (is_file ( "/usr/share/fonts/truetype/freefont/FreeSerif.ttf" ))
   $fontfile = "/usr/share/fonts/truetype/freefont/FreeSerif.ttf";
 else if (is_file ( "/opt/share/fonts/bitstream-vera/VeraSe.ttf" ))
   $fontfile = "/opt/share/fonts/bitstream-vera/VeraSe.ttf";
+else if (is_file ( "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraSe.ttf" ))
+  $fontfile = "/usr/share/fonts/truetype/ttf-bitstream-vera/VeraSe.ttf";
 
 // dot radius
 $rad = 8;

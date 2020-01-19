@@ -9,7 +9,8 @@ if ($_SERVER ['REQUEST_METHOD'] === 'POST')
   $log_file = "data/" . $dbox_file;
   if(isset($_POST["t_log"]))
   {
-    file_put_contents($log_file, (htmlspecialchars($_POST["t_log"]) . PHP_EOL), FILE_APPEND | LOCK_EX);
+    file_put_contents($log_file, ($_POST["t_log"] . PHP_EOL), FILE_APPEND | LOCK_EX);
+//    file_put_contents($log_file, (htmlspecialchars($_POST["t_log"]) . PHP_EOL), FILE_APPEND | LOCK_EX);
     // save to Dropbox
     include_once "dbox.php";
   

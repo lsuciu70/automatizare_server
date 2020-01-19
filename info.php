@@ -234,7 +234,6 @@ if($is_log_file)
   }
 }
 
-
 echo "<!DOCTYPE html>\n";
 echo "<html>\n";
 echo " <head>\n";
@@ -263,7 +262,6 @@ echo "   </tr>\n";
 
 if($is_sus)
 {
-  //$t_loc = "etaj";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th align='center'>Etaj</th>\n";
@@ -334,7 +332,6 @@ if($is_sus)
 }
 if($is_jos)
 {
-  //$t_loc = "parter";
   echo "   <tr><td colspan='5'></td></tr>\n";
   echo "   <tr>\n";
   echo "    <th align='center'>Parter</th>\n";
